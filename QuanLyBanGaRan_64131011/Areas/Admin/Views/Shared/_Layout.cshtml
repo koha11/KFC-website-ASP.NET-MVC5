@@ -1,0 +1,135 @@
+﻿@{
+    var id = Request.RequestContext.RouteData.Values["id"];
+    var className = "";
+    var user = (QuanLyBanGaRan_64131011.Models.AppUser)HttpContext.Current.Session["user"];
+    var uName = user.FullName;
+    var roleID = user.RoleID;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.header - My ASP.NET Application</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .main-content{
+            width: 100% !important
+        }
+
+        @@media(max-width: 480px) {
+            .main-content {
+                width: fit-content !important
+            }
+        }
+    </style>
+    @RenderSection("Link", false)
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="d-flex">
+    @*Loading container*@
+    <div id="loading-container" class="visually-hidden position-fixed top-0 start-0 d-flex justify-content-center align-items-center" style="height: 100vh; width: 100vw; background-color: rgba(1,1,1,0.3); z-index:10; overflow:clip">
+        <i class='bx bx-loader-circle loading fs-1'></i>
+    </div>
+
+    @*Successful Popup*@
+    <div id="successful-container" class="visually-hidden position-fixed d-flex justify-content-center align-items-center rounded-5" style="height: 160px; width: 320px; background-color: rgba(1,1,1,0.9); z-index:9999; top: 50%; left: 50%; transform:translate(-50%,-50%)">
+        <div class="text-center">
+            <i class='bx bxs-check-circle text-success fs-1'></i>
+            <span class="d-block text-white"></span>
+        </div>
+    </div>
+
+    <button type="button" class="d-lg-none d-block position-absolute top-0 start-0 py-2 border-0" id="collapse-btn" style="background-color: var(--main-color); width: 12%;z-index: 4">
+        <i class='bx bx-list-ul fs-1'></i>
+    </button>
+
+    <div id="sidebar" class="d-flex flex-column justify-content-start align-items-center py-5 d-none d-lg-block bg-white" style="min-height: 100vh; width: 12%; z-index: 3;">
+        <div class="d-flex w-100 flex-column">
+            @{className = ViewBag.header == "Tổng quan" ? "active" : "";}
+            <a class="nav-link p-3 @className" href="/Admin/">Tổng quan</a>
+            @if (roleID == "ADMIN")
+            {
+                className = ViewBag.header == "Nhân sự" ? "active" : "";
+                <a class="nav-link p-3 @className" href="/Admin/Employee">Nhân sự</a>
+                className = ViewBag.header == "Khách hàng" ? "active" : "";
+                <a class="nav-link p-3 @className" href="/Admin/Customer">Khách hàng</a>
+            }
+            @{className = ViewBag.header == "Thức ăn" ? "active" : "";}
+            <a class="nav-link p-3 @className" href="/Admin/Food">Thức ăn</a>
+            @{className = ViewBag.header == "Đơn hàng" ? "active" : "";}
+            <a class="nav-link p-3 @className" href="/Admin/Order">Đơn hàng</a>
+            @{className = ViewBag.header == "Khuyến mãi" ? "active" : "";}
+            <a class="nav-link p-3 @className" href="/Admin/Promotion">CTKM</a>
+            @*@{className = ViewBag.header == "Voucher" ? "active" : "";}
+            <a class="nav-link p-3 @className" href="/Admin/Voucher">Voucher</a>*@
+            <a class="nav-link p-3" href="/Admin/logout">Đăng xuất</a>
+        </div>
+    </div>
+
+    <div class="main-content d-flex flex-column" style="background-color: #F5F6FA; padding-bottom: 2rem;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar bg-white flex-column">
+            <div class="py-lg-2 justify-content-end container">
+
+                <div class="d-flex justify-content-center d-none d-lg-block" style="margin-right: 100px;">
+                    <img class="" src="/Images/logo1.png" style="height: 60px" />
+                </div>
+
+                <div class="justify-content-lg-around d-flex w-75">
+                    <form action="#" class="d-flex justify-content-lg-center align-items-lg-center w-75 position-relative px-2">
+                        <input class="fs-6 px-3 py-2 rounded-5 w-100" name="id" placeholder="Hãy tìm kiếm theo @ViewBag.sectionid ở đây"/>
+                        <button class="ms-lg-2 position-absolute border-0" style="right: 10px; background-color: unset" type="submit">
+                            <i class='bx bx-search'></i>
+                        </button>
+                    </form>
+                    <div class="d-flex align-items-center">
+                        <span>@uName</span>
+                        <div class="dropdown">
+                            <a class="rounded-circle fs-3 nav-link px-lg-3 py-lg-1" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class='bx bx-user'></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="py-4 container">
+            <span class="fw-bold fs-2">@ViewBag.header</span>
+        </div>
+
+        @RenderBody()
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            const collapseBtn = $("#collapse-btn")
+            const sidebar = $("#sidebar")
+
+            collapseBtn.click(() => {
+                //Nếu click mở sidebar
+                if (!sidebar.hasClass("open")) {
+                    sidebar.toggleClass("open")
+                    sidebar.toggleClass("position-fixed")
+                    sidebar.toggleClass("w-100")
+                    sidebar.toggleClass("d-none")
+                    sidebar.toggleClass("fs-2")
+                }
+                else { //Nếu click đóng sidebar
+                    sidebar.toggleClass("open")
+                    sidebar.toggleClass("position-fixed")
+                    sidebar.toggleClass("w-100")
+                    sidebar.toggleClass("d-none")
+                    sidebar.toggleClass("fs-2")
+                }
+            })
+        })
+    </script>
+</body>
+</html>

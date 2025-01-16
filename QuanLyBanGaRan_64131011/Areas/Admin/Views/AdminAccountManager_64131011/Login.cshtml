@@ -1,0 +1,42 @@
+﻿@model QuanLyBanGaRan_64131011.Models.LoginViewModel_64131011
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <section class="d-flex py-4 justify-content-center align-items-center" style="height: 100vh;">
+        <form class="px-5 py-3 rounded-5 shadow-lg" style="width:40%;" id="login-form" action="" method="post">
+            <div class="details-group">
+                <label for="username" class="form-label">Tên đăng nhập</label>
+                <input type="text" value="@ViewBag.username" data-vtype="Required" class="form-control" id="username" name="Username">
+            </div>
+            <div class="details-group">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" value="@ViewBag.password" data-vtype="Required-MinLength-6" class="form-control" id="password" name="Password">
+            </div>
+            <span style="color:red">@ViewBag.ErrMsg</span>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-danger">Đăng nhập</button>
+            </div>
+        </form>
+    </section>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#login-form")
+        validate(mainForm)
+    </script>
+</body>    
+</html>

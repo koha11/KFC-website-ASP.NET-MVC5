@@ -1,0 +1,115 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|d:\\documents\\ntu\\asp.net_mvc\\quanlybangaran_64131011\\quanlybangaran_64131011\\areas\\admin\\controllers\\ordermanager_64131011controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|solutionrelative:quanlybangaran_64131011\\areas\\admin\\controllers\\ordermanager_64131011controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|d:\\documents\\ntu\\asp.net_mvc\\quanlybangaran_64131011\\quanlybangaran_64131011\\areas\\admin\\views\\promotionmanager_64131011\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|solutionrelative:quanlybangaran_64131011\\areas\\admin\\views\\promotionmanager_64131011\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\quanlybangaran_64131011\\areas\\admin\\controllers\\promotionmanager_64131011controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|solutionrelative:quanlybangaran_64131011\\areas\\admin\\controllers\\promotionmanager_64131011controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\quanlybangaran_64131011\\areas\\admin\\controllers\\foodmanager_64131011controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|solutionrelative:quanlybangaran_64131011\\areas\\admin\\controllers\\foodmanager_64131011controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\quanlybangaran_64131011\\content\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{877EE9C8-4706-407F-A797-05682E7F79D1}|QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011.csproj|solutionrelative:quanlybangaran_64131011\\content\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 322,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Site.css",
+              "DocumentMoniker": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Content\\Site.css",
+              "RelativeDocumentMoniker": "QuanLyBanGaRan_64131011\\Content\\Site.css",
+              "ToolTip": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Content\\Site.css",
+              "RelativeToolTip": "QuanLyBanGaRan_64131011\\Content\\Site.css",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAAANoAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-12-23T18:12:23.155Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FoodManager_64131011Controller.cs",
+              "DocumentMoniker": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\FoodManager_64131011Controller.cs",
+              "RelativeDocumentMoniker": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\FoodManager_64131011Controller.cs",
+              "ToolTip": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\FoodManager_64131011Controller.cs",
+              "RelativeToolTip": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\FoodManager_64131011Controller.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAgwDgAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T02:40:14.389Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PromotionManager_64131011Controller.cs",
+              "DocumentMoniker": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\PromotionManager_64131011Controller.cs",
+              "RelativeDocumentMoniker": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\PromotionManager_64131011Controller.cs",
+              "ToolTip": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\PromotionManager_64131011Controller.cs",
+              "RelativeToolTip": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\PromotionManager_64131011Controller.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABIAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T02:41:28.018Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OrderManager_64131011Controller.cs",
+              "DocumentMoniker": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\OrderManager_64131011Controller.cs",
+              "RelativeDocumentMoniker": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\OrderManager_64131011Controller.cs",
+              "ToolTip": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\OrderManager_64131011Controller.cs",
+              "RelativeToolTip": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Controllers\\OrderManager_64131011Controller.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T04:03:21.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Views\\PromotionManager_64131011\\Index.cshtml",
+              "RelativeDocumentMoniker": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Views\\PromotionManager_64131011\\Index.cshtml",
+              "ToolTip": "D:\\Documents\\NTU\\ASP.NET_MVC\\QuanLyBanGaRan_64131011\\QuanLyBanGaRan_64131011\\Areas\\Admin\\Views\\PromotionManager_64131011\\Index.cshtml",
+              "RelativeToolTip": "QuanLyBanGaRan_64131011\\Areas\\Admin\\Views\\PromotionManager_64131011\\Index.cshtml",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAAAI8AAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-12T02:48:36.96Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 78,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

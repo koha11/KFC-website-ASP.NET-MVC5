@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+        .dashboard {
+            max-width: 900px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .chart-container {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Admin Dashboard</h1>
+        <div class="chart-container">
+            <canvas id="dailyRevenueChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="monthlyRevenueChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="yearlyRevenueChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for demonstration
+        const dailyData = {
+            labels: [1, 2, "03", "04", "05", "06", "07"], // Days of the week
+            datasets: [{
+                label: "Doanh thu hàng ngày",
+                data: [120, 150, 180, 220, 300, 250, 400],
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1
+            }]
+        };
+
+        const monthlyData = {
+            labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7"],
+            datasets: [{
+                label: "Doanh thu hàng tháng",
+                data: [3000, 4000, 3500, 5000, 6000, 7000, 8000],
+                backgroundColor: "rgba(153, 102, 255, 0.2)",
+                borderColor: "rgba(153, 102, 255, 1)",
+                borderWidth: 1
+            }]
+        };
+
+        const yearlyData = {
+            labels: ["2020", "2021", "2022", "2023", "2024"],
+            datasets: [{
+                label: "Doanh thu hàng năm",
+                data: [50000, 60000, 70000, 80000, 90000],
+                backgroundColor: "rgba(255, 159, 64, 0.2)",
+                borderColor: "rgba(255, 159, 64, 1)",
+                borderWidth: 1
+            }]
+        };
+
+        // Create charts
+        const dailyRevenueCtx = document.getElementById('dailyRevenueChart').getContext('2d');
+        new Chart(dailyRevenueCtx, {
+            type: 'bar',
+            data: dailyData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Thống kê doanh thu hàng ngày'
+                    }
+                }
+            }
+        });
+
+        const monthlyRevenueCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+        new Chart(monthlyRevenueCtx, {
+            type: 'line',
+            data: monthlyData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Thống kê doanh thu hàng tháng'
+                    }
+                }
+            }
+        });
+
+        const yearlyRevenueCtx = document.getElementById('yearlyRevenueChart').getContext('2d');
+        new Chart(yearlyRevenueCtx, {
+            type: 'pie',
+            data: yearlyData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Thống kê doanh thu hàng năm'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

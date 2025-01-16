@@ -1,0 +1,257 @@
+﻿@*/Cart*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.CartViewModel_64131011>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = HttpContext.Current.Session["user"] as QuanLyBanGaRan_64131011.Models.AppUser;
+    var totalPayment = 0;
+    var countFood = 0;    
+}
+
+<section class="py-4 container">
+    <h3 class="text-uppercase">
+        Giỏ hàng của tôi
+    </h3>
+    <div class="row">
+        @if (ViewBag.Empty != "")
+        {
+            <div class="col m-0 p-0 position-relative d-flex flex-column justify-content-center align-items-center" style="background-color: #fafafa">
+                <h1 class="text-uppercase">
+                    Giỏ hàng của <br /> bạn đang trống. <br /> Hãy đặt món <br /> ngay!
+                </h1>
+                <a class="btn rounded-pill btn-danger w-50 mt-3" href="/Menu">Bắt đầu đặt hàng</a>
+            </div>
+            <img class="col m-0 p-0" src="~/Images/bg.jfif" />
+        }
+        else
+        {
+            <div id="cart-list" class="col-8 row row-cols-1 p-2">
+                @foreach (var food in Model)
+                {
+                    <div class="col row align-items-center justify-content-between p-3 fw-bold food-row rounded shadow" style="height: fit-content" data-fid=@food.FoodID>
+                        <div class="d-flex col-8">
+                            <img src="/Images/@food.FoodImage" style="height: 10rem" />
+                            <div class="d-flex flex-column justify-content-center px-4">
+                                <span class="fw-bold">@food.FoodName</span>
+                                <div class="mt-2" style="font-size: 0.75rem">
+                                    <a class="text-black ms-2" href="/Cart/RemoveFood/@food.FoodID">Xoá</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end col-4">
+                            <a href="#" class="text-black fs-1 amount-adjust-btn btn p-0 border-0" data-adjust="minus" style="line-height: 1">
+                                <i class='bx bx-minus-circle'></i>
+                            </a>
+                            <span class="px-2 food-amount">@food.Amount</span>
+                            <a href="#" class="text-black fs-1 amount-adjust-btn btn p-0 border-0" data-adjust="plus" style="line-height: 1">
+                                <i class='bx bx-plus-circle'></i>
+                            </a>
+
+                            <span class="w-50 d-block total-price text-nowrap text-center">@food.TotalPrice.ToString("N0") VNĐ</span>
+                        </div>
+                    </div>
+
+                    totalPayment += (int)food.TotalPrice;
+                    countFood += food.Amount;
+                }
+            </div>
+            @*THÔNG TIN ĐƠN HÀNG*@
+            <div id="order-infor" class="col-4 sticky-top">
+                <div class="d-flex flex-column p-4 rounded shadow">
+                    <span class="fs-5 fw-bold text-uppercase" id="food-counter">@countFood MÓN</span>                    
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <span>Tổng đơn hàng</span>
+                        <span class="" id="total-payment-price">@totalPayment.ToString("N0") VNĐ</span>
+                    </div>
+                    <hr />
+                    <button class="btn text-white" id="payment-btn" style="background-color: var(--main-color)" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Thanh Toán @totalPayment.ToString("N0") VNĐ
+                    </button>
+
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/Cart/Payment" id="payment-form" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Xác nhận thông tin giao hàng</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body row-cols-1 row px-4">
+                        <div class="d-flex flex-column details-group col">
+                            <label>Họ và tên</label>
+                            <input name="FullName" data-vtype="Required-NotNumber" value="@user.FullName" />
+                        </div>
+                        <div class="d-flex flex-column details-group col">
+                            <label>Địa chỉ</label>
+                            <input name="Address" value="@user.Address" data-vtype="Required" />
+                        </div>
+                        <div class="d-flex flex-column details-group col">
+                            <label>Số điện thoại</label>
+                            <input name="Phone" value="@user.Phone" data-vtype="Required-Phone" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn text-white" style="background-color: var(--main-color)">Thanh toán</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // ĐỊNH NGHĨA CÁC BIẾN
+            const loader = $("#loading-container")
+            const adjustBtns = $(".amount-adjust-btn")
+            const applyVouBtn = $(".apply-voucher-btn")
+            const voucherSelector = $("#voucher-selector")
+
+            const successPopup = $("#successful-container")
+
+            let cartData = { TotalFood: @countFood, TotalPayment: @totalPayment}
+
+            //ĐỊNH NGHĨA CÁC HÀM
+
+            // Render Thông tin đơn hàng
+            const renderOrderInfor = (foodCount, totalPayment) => {
+                const foodCounterElm = $("#food-counter")
+                const totalPaymentPriceElm = $('#total-payment-price')
+                const paymentElm = $('#payment-btn')
+
+                foodCounterElm.text(foodCount + " Món")
+                totalPaymentPriceElm.text(totalPayment.toLocaleString() + " VNĐ")
+                paymentElm.text("Thanh toán " + totalPayment.toLocaleString() + " VNĐ")
+            }
+
+            // Hàm xử lý giao diện nút trừ (số lượng ko được nhỏ hơn 1)
+            const checkDisabledBtn = (minusBtn, amount) => {
+                if (amount == 1)
+                    minusBtn.addClass("disabled")
+                else
+                    minusBtn.removeClass("disabled")
+            }
+
+            const popupMsg = (msg) => {
+                let msgContainer = successPopup.find("span")
+                msgContainer.text(msg)
+
+                successPopup.toggleClass("visually-hidden")
+                setTimeout(() => successPopup.toggleClass("visually-hidden"), 2000)
+            }           
+
+            //GỌI VÀ XỬ LÝ
+            applyVouBtn.click(() => {
+                let myPromise = new Promise((resolve) => {
+                    $.ajax({
+                        url: `/Cart/AddVoucher`, // URL đến controller action
+                        type: 'POST', // Phương thức HTTP
+                        data: {
+                            VoucherID: voucherSelector.val(),
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            loader.toggleClass("visually-hidden")
+                            console.log(response)
+                            resolve(response)
+                        },
+                        beforeSend: function () {
+                            loader.toggleClass("visually-hidden")
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+
+                myPromise.then((res) => {
+                    renderOrderInfor(cartData.TotalFood, cartData.TotalPayment - res.Discount)
+                })
+            })            
+
+            adjustBtns.each((index, btn) => {
+                const foodRow = $(btn).closest(".food-row")
+                const amountElm = $(foodRow).find(".food-amount")
+                const totalPriceElm = $(foodRow).find(".total-price")
+                const fid = $(foodRow).data("fid")
+                const adjustType = $(btn).data("adjust")
+
+                //Kiểm tra disabled vào lần đầu khởi tạo
+                if (adjustType == "minus")
+                    checkDisabledBtn($(btn), parseInt(amountElm.text()))
+
+                $(btn).click(function (e) {
+                    e.preventDefault()
+
+                    if ($(btn).hasClass("disabled"))
+                        return
+
+                    let amount = parseInt(amountElm.text())
+                    amount = adjustType == "minus" ? amount - 1 : amount + 1
+
+                    let myPromise = new Promise((resolve) => {
+                        $.ajax({
+                            url: `/Cart/UpdateFoodAmount`, // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: {
+                                FoodID: fid,
+                                Amount: amount
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                loader.toggleClass("visually-hidden")
+                                console.log(response)
+                                resolve(response)
+                            },
+                            beforeSend: function () {
+                                loader.toggleClass("visually-hidden")
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((res) => {
+                        cartData = res
+                        amountElm.text(amount)
+                        totalPriceElm.text(res.TotalFoodPrice.toLocaleString() + " VNĐ")
+
+                        renderOrderInfor(res.TotalFood, res.TotalPayment)
+
+                        // Kiểm tra lại disabled sau khi thay đổi số lượng
+                        const minusBtn = $(foodRow).find("a[data-adjust='minus']")
+
+                        checkDisabledBtn(minusBtn, amount)
+                    })
+                })
+            })
+
+        })
+        
+    </script>
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#payment-form")
+
+        validate(mainForm)
+    </script>
+}
+
+@section Links {
+
+}

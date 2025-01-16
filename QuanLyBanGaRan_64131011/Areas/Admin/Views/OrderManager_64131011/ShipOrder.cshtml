@@ -1,0 +1,147 @@
+﻿@*/Admin/Order/ShipOrder*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.OrderViewModel_64131011>
+
+@{
+    ViewBag.Title = "ShipOrder";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
+    var id = Request.RequestContext.RouteData.Values["id"];
+}
+
+@*Khu vực của web grid (danh sách các đơn hàng)*@
+<div class="body-content bg-white p-4 mt-5 container rounded">
+    <div class="py-2 d-flex w-100 justify-content-end">
+        <a href="/Admin/Order" class="btn btn-outline-secondary px-4">QUAY LẠI</a>
+    </div>
+    @grid.GetHtml(
+        tableStyle: "table",
+        headerStyle: "thead-dark",
+        footerStyle: "tfoot-style",
+        columns: grid.Columns(
+            grid.Column("OrderID", header: "Mã Đơn"),
+            grid.Column("OrderedBy", header: "Mã KH"),
+            grid.Column("OrderDate", header: "Ngày đặt", format:
+                item =>
+                {
+                    DateTime? orderDate = item.OrderDate as DateTime?;
+                    return orderDate.HasValue
+                    ? orderDate.Value.ToString("dd/MM/yyyy")
+                    : "N/a";
+                }),
+            grid.Column("OrderTime", header: "Giờ đặt", format:
+                item =>
+                {
+                    DateTime? orderDate = item.OrderDate as DateTime?;
+                    return orderDate.HasValue
+                    ? orderDate.Value.ToString("HH:mm:ss")
+                    : "N/a";
+                }),
+            grid.Column("CountFood", header: "Số lượng", format: @<text>@item.CountFood món</text>),
+grid.Column("TotalPrice", header: "Tổng tiền", format: item =>
+{
+var price = item.TotalPrice;
+if (price is null)
+return "N/a";
+else
+return price.ToString("N0") + " VNĐ";
+}),
+grid.Column(header: "", format:
+@<text>
+    <div class="d-flex justify-content-around align-items-center">
+        <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#shipModal" data-bs-id="@item.OrderID">
+            Đã giao ĐH
+        </a>
+        <div>
+            @*Btn chuyển đến trang details*@
+            <a href="/Admin/Order/Details/@item.OrderID" class="btn btn-outline-primary btn-sm">
+                <i class='bx bx-detail'></i>
+            </a>
+            @*Btn xoá khách hàng*@
+            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="@item.OrderID">
+                <i class='bx bx-x'></i>
+            </a>
+        </div>
+    </div>
+</text>
+)
+)
+)
+    @*Modal xoá đơn hàng*@
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        Bạn có chắc chắn muốn xoá đơn hàng này không
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @*Modal giao đơn hàng*@
+    <div class="modal fade" id="shipModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post">
+                <input name="OrderID" type="hidden" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        Bạn có chắc chắn là đã giao ĐH này chưa
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                    <button type="submit" class="btn btn-success">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const deleteModal = $('#deleteModal')
+
+            const shipModal = $('#shipModal')
+
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var ordID = btn.getAttribute('data-bs-id')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+
+                modalContent.text(`Bạn có chắc chắn muốn Xoá ĐH ${ordID} không?`)
+                modalForm.attr('action', `/Admin/Order/Delete/${ordID}`)
+
+                modalTitle.text('Xoá đơn hàng ' + ordID)
+            })
+
+            shipModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var ordID = btn.getAttribute('data-bs-id')
+                var modalTitle = shipModal.find('.modal-title')
+                var modalContent = shipModal.find('.modal-body div')
+                var modalInput = shipModal.find('input[name=OrderID]')
+
+                modalContent.text(`Bạn có chắc chắn là đã giao ĐH ${ordID} này chưa?`)
+                modalInput.val(ordID)
+
+                modalTitle.text('Duyệt đơn hàng ' + ordID)
+            })
+        });
+    </script>
+}

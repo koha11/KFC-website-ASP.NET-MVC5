@@ -1,0 +1,338 @@
+﻿@*/*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.Food>
+@{
+    ViewBag.Title = "Home Page";
+    var user = HttpContext.Current.Session["user"] as QuanLyBanGaRan_64131011.Models.AppUser;
+    var uid = user != null ? user.UserID : "";
+}
+
+
+@*CAROUSEL KHUYẾN MÃI*@
+<section id="promotion-carousel">
+    <div id="Desktop-Promotion-Carousel" class="carousel slide d-lg-block d-none" data-bs-ride="carousel">
+        <div class="carousel-inner" style="min-height: 400px;">
+            <div class="carousel-item h-100 active">
+                <img src="~/Images/carousel1a.jpg" class="d-block img-fluid" alt="...">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/Images/carousel1b.jpg" class="d-block img-fluid" alt="...">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/Images/carousel1c.jpg" class="d-block img-fluid" alt="...">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/Images/carousel1d.jpg" class="d-block img-fluid" alt="...">
+            </div>
+        </div>
+        @*CAROUSEL ACTION*@
+        <button class="carousel-control-prev" type="button" data-bs-target="#Desktop-Promotion-Carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#Desktop-Promotion-Carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    @*CAROUSEL KHUYẾN MÃI VERSION MOBILE*@
+    <div id="Mobile-Promotion-Carousel" class="carousel slide d-lg-none" data-bs-ride="carousel">
+        <div class="carousel-inner" style="min-height: 400px;">
+            <div class="carousel-item h-100 active">
+                <img src="~/Images/carousel2a.jpg" class="d-block img-fluid" alt="...">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/Images/carousel2b.jpg" class="d-block img-fluid" alt="...">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/Images/carousel2c.jpg" class="d-block img-fluid" alt="...">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/Images/carousel2d.jpg" class="d-block img-fluid" alt="...">
+            </div>
+        </div>
+        @*CAROUSEL ACTION*@
+        <button class="carousel-control-prev" type="button" data-bs-target="#Mobile-Promotion-Carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#Mobile-Promotion-Carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+@*NỘI DUNG CHÍNH*@
+<section class="py-4">
+    <div class="container-lg" id="category-menu">
+        <div class="d-flex align-items-center">
+            <h3 class="m-0 pe-3">DANH MỤC MÓN ĂN</h3>
+            <hr class="flex-fill m-0" style="height: 2px; background-color: rgba(0, 0, 0, .1);" />
+        </div>
+        <div class="row row-cols-2 row-cols-lg-4 g-4 py-4">
+            <div class="col">
+                <a href="/Menu#uu-dai" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/khuyenmai.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Ưu đãi
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#mon-moi" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/monmoi.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Món mới
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#combo-1-nguoi" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/combo1nguoi.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Combo 1 Người
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#combo-nhom" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/combonhom.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Combo Nhóm
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#ga-ran-ga-quay" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/ga.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Gà Rán - Gà Quay
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#burger-com-mi-y" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/burger.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Burger - Cơm - Mì Ý
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#thuc-an-nhe" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/thucannhe.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Thức Ăn Nhẹ
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="/Menu#thuc-uong-trang-mieng" class="card h-100 card-title text-decoration-none text-black">
+                    <img src="~/Images/thucuong.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex">
+                        <h5>
+                            Thức Uống & Tráng Miệng
+                        </h5>
+                        <i class='bx bx-chevrons-right ms-1 fs-4'></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container-lg">
+        <div class="d-flex align-items-center">
+            <h3 class="m-0 pe-3 text-uppercase">Có thể bạn sẽ thích món này</h3>
+            <hr class="flex-fill m-0" style="height: 2px; background-color: rgba(0, 0, 0, .1);" />
+        </div>
+        <!-- Swiper Container -->
+        <div class="swiper py-4">
+            <div class="swiper-wrapper">
+                @foreach (var food in Model)
+                {
+                    <div class="swiper-slide">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="" style="height: 50%">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="swiper-button-next h-100 px-4" style="color:var(--main-color); top: 0; right: 0"></div>
+            <div class="swiper-button-prev h-100 px-4" style="color: var(--main-color); top: 0; left: 0"></div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        // Swiper Initialization
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 4, // Hiển thị 3 card cùng lúc
+            spaceBetween: 30, // Khoảng cách giữa các card
+            breakpoints: {
+                // Khi màn hình rộng từ 640px, hiển thị 2 slide
+                0: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                // Khi màn hình rộng từ 768px, hiển thị 3 slide
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 30
+                },
+                // Khi màn hình rộng từ 1024px, hiển thị 4 slide
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 40
+                }
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            loop: true, // Lặp lại slider
+            autoplay: {
+                delay: 3000, // Tự động trượt sau 3 giây
+                disableOnInteraction: false,
+            },
+            on: {
+                init: function () {
+                    setSlideHeight();
+                },
+                resize: function () {
+                    setSlideHeight();
+                }
+            }
+        });
+
+        // Hàm để đồng bộ chiều cao các slide
+        function setSlideHeight() {
+            var slides = document.querySelectorAll('.swiper-slide');
+            var maxHeight = 0;
+
+            // Tính toán chiều cao lớn nhất
+            slides.forEach(function (slide) {
+                slide.style.height = 'auto'; // Đặt lại chiều cao để tính toán
+                var slideHeight = slide.offsetHeight;
+                if (slideHeight > maxHeight) {
+                    maxHeight = slideHeight;
+                }
+            });
+
+            // Áp dụng chiều cao lớn nhất cho tất cả các slide
+            slides.forEach(function (slide) {
+                slide.style.height = maxHeight + 'px';
+            });
+        }
+
+        $(document).ready(function () {
+            const loader = $("#loading-container")
+
+            const successPopup = $("#successful-container")
+
+            const addBtns = $(".add-btn")
+
+            const popupMsg = (msg) => {
+                let msgContainer = successPopup.find("span")
+                msgContainer.text(msg)
+
+                successPopup.toggleClass("visually-hidden")
+                setTimeout(() => successPopup.toggleClass("visually-hidden"), 2000)
+            }
+
+            addBtns.each((index, btn) => {
+                $(btn).click(() => {
+                    const uid = "@uid"
+
+                    if (uid == "") {
+                        window.location.href = "/Login"
+                        return
+                    }
+
+                    const foodCard = $(btn).closest(".card")
+
+                    const fid = foodCard.data("fid")
+
+                    let myPromise = new Promise((resolve) => {
+                        $.ajax({
+                            url: `/Cart/AddFood`, // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: {
+                                FoodID: fid,
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                loader.toggleClass("visually-hidden")
+                                console.log(response)
+                                resolve(response)
+                            },
+                            beforeSend: function () {
+                                loader.toggleClass("visually-hidden")
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((res) => {
+                        const cartBtn = $(".cart-btn span")
+                        const amount = parseInt($(cartBtn[0]).text())
+                        popupMsg("Bạn đã thêm món thành công")
+
+                        $(cartBtn[0]).text(amount + 1)
+                        $(cartBtn[1]).text(amount + 1)
+                    })
+                })
+            })
+
+        })
+    </script>
+}
+
+@section Links {
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+}

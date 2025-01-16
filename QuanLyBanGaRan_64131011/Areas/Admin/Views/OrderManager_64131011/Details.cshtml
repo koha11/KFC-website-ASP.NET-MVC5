@@ -1,0 +1,674 @@
+﻿@*/Admin/Order/Details/{id}*@
+
+@model QuanLyBanGaRan_64131011.Areas.Admin.Data.OrderDetailViewModel_64131011
+@{
+    ViewBag.Title = "Details";
+    var id = Request.RequestContext.RouteData.Values["id"];
+    var user = (QuanLyBanGaRan_64131011.Models.AppUser)HttpContext.Current.Session["user"];
+    var uName = user.FullName;
+    var roleID = user.RoleID;
+}
+
+
+@*Thông tin chi tiết đơn hàng*@
+<div class="body-content bg-white p-4 container rounded">
+    <section class="d-flex flex-column">
+        <div class="d-flex justify-content-between">
+            <h4 class="pb-4">Chi tiết đơn hàng @id</h4>
+
+            <a href="/Admin/Order" class="btn btn-outline-info h-25 d-flex align-items-center justify-content-center" id="back-btn">
+                <i class='bx bx-left-arrow-alt fs-4'></i>
+                <span>
+                    Quay lại
+                </span>
+            </a>
+
+        </div>
+        <form class="d-flex" enctype="multipart/form-data" id="edit-form">
+            <input type="hidden" value="@id" name="OrderID" />
+            <input type="hidden" value="" name="TotalPrice" />
+
+            @*Cột đầu tiên*@
+            <div class="d-flex row row-cols-lg-3 row-cols-1 px-2">
+                <div class="d-flex flex-column details-group col">
+                    <label for="OrderedBy">Mã khách hàng</label>
+                    <input list="cidlist" id="OrderedBy" value="@Model.OrderedBy" name="OrderedBy" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="cName">Họ và tên khách hàng</label>
+                    <input id="cName" data-lock value="@Model.CName" name="CName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="OrderDate">Thời gian đặt</label>
+                    <input id="OrderDate" value="@Model.OrderDate" name="OrderDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="AcceptedBy">Mã nhân viên duyệt</label>
+                    <input id="AcceptedBy" value="@Model.AcceptedBy" name="AcceptedBy" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="aName">Họ và tên NV duyệt</label>
+                    <input id="aName" data-lock value="@Model.AName" name="AName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="AcceptDate">Thời gian duyệt</label>
+                    <input id="AcceptDate" value="@Model.AcceptDate" name="AcceptDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="ShippedBy">Mã nhân viên giao</label>
+                    <input id="ShippedBy" value="@Model.ShippedBy" name="ShippedBy" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="sName">Họ và tên NV giao</label>
+                    <input id="sName" data-lock value="@Model.SName" name="SName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="ShipmentDate">Thời gian giao</label>
+                    <input id="ShipmentDate" value="@Model.ShipmentDate" name="ShipmentDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="address">Địa chỉ</label>
+                    <input id="address" data-lock value="@Model.Address" name="Address" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="Status">Tình trạng đơn</label>
+                    @Html.DropDownList("Status", null, htmlAttributes: new { @id = "Status", @class = "px-3 py-1 mt-2 ms-1 rounded-3", @style = "width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid; pointer-events: none" })
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="FinishDate">Thời gian hoàn thành</label>
+                    <input id="FinishDate" value="@Model.FinishDate" name="FinishDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+            </div>
+        </form>
+
+        <div class="d-flex align-items-center justify-content-end py-2 mt-4">
+            <h5 class="m-0">Tổng tiền: </h5>
+            <span class="ms-3 fs-5 TotalPrice">@Model.TotalPrice.ToString("N0") VNĐ</span>
+        </div>
+        @if (roleID == "ADMIN")
+        {
+            <div class="d-flex justify-content-end py-2 mt-4">
+                <button type="button" class="btn btn-outline-secondary mx-2 visually-hidden" id="cancel-btn">
+                    Huỷ bỏ
+                    <i class='bx bx-x'></i>
+                </button>
+
+                <button type="button" class="btn btn-outline-success mx-2 visually-hidden" id="save-btn">
+                    Lưu lại
+                    <i class='bx bx-check'></i>
+                </button>
+
+                <button type="button" class="btn btn-outline-primary mx-2" id="edit-btn">
+                    Chỉnh sửa
+                    <i class='bx bx-edit-alt'></i>
+                </button>
+            </div>
+        }
+    </section>
+</div>
+
+@*Thông tin danh sách các món có trong đơn hàng*@
+<div class="body-content bg-white p-4 mt-5 container rounded">
+    <section class="d-flex flex-column">
+        <div class="d-flex justify-content-between pb-4">
+            <h3 class="">Danh sách món ăn</h3>
+            @if (roleID == "ADMIN")
+            {
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                    Thêm món
+                </button>
+            }
+            @*Modal thêm món*@
+            <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="max-width: 30%">
+                    <form class="modal-content" id="add-food-form" method="post" action="/Admin/Order/AddFood">
+                        @*Input ẩn cho OrderID*@
+                        <input type="hidden" value="@id" name="OrderID" />
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">THÊM MÓN</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex">
+                            @*Cột thứ nhất*@
+                            <div class="d-flex flex-column" style="width: 70%">
+                                <div class="d-flex flex-column details-group">
+                                    <label for="FoodID">Mã món</label>
+                                    <input id="FoodID" name="FoodID" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                                </div>
+                            </div>
+
+                            @*Cột thứ hai*@
+                            <div class="d-flex flex-column" style="width: 30%">
+                                <div class="d-flex flex-column details-group align-items-end">
+                                    <label for="Amount">Số lượng</label>
+                                    <input type="number" id="Amount" name="Amount" class="px-2 py-1 mt-2 ms-1 rounded-3" style="width: 50%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                            <button type="button" class="btn btn-primary" id="add-food-btn" data-bs-dismiss="modal">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container" id="food-table">
+
+        </div>
+        @*Modal xoá món*@
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="">
+                            Bạn có chắc chắn muốn xoá đơn hàng này không
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger delete-btn" data-bs-dismiss="modal">Xoá</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        /// <reference path="jquery-3.7.0.min.js" />
+        $(document).ready(function () {
+            //Định nghĩa các biến và hàm
+            const editBtn = $('#edit-btn')
+            const backBtn = $('#back-btn')
+            const cancelBtn = $('#cancel-btn')
+            const saveBtn = $('#save-btn')
+
+            const addFoodBtn = $("#add-food-btn") // Nút thêm món vào đơn hàng
+
+            const editForm = $('#edit-form')
+            const addFoodForm = $('#add-food-form')
+
+            const inputs = $('#edit-form input')
+            const selectInput = $('select')
+
+            const foodTable = $('#food-table')
+
+            const deleteModal = $('#deleteModal')
+
+
+            let srcData = {};
+
+            const handleDatePicker = () => {
+                flatpickr("#OrderDate", {
+                    dateFormat: "H:i:S d/m/Y",  // Định dạng ngày
+                    maxDate: "today",
+                    enableTime: true,
+                    enableSeconds: true,
+                    time_24hr: true,  // Định dạng 24 giờ
+                    onOpen: function (selectedDates, dateStr, instance) {
+                        // Nếu input ở trạng thái readonly, đóng date table
+                        if (instance.input.hasAttribute("readonly")) {
+                            instance.close(); // Đóng bảng chọn ngày
+                        }
+                    },
+                });
+                flatpickr("#AcceptDate", {
+                    dateFormat: "H:i:S d/m/Y",  // Định dạng ngày
+                    maxDate: "today",
+                    enableTime: true,
+                    enableSeconds: true,
+                    time_24hr: true,  // Định dạng 24 giờ
+                    onOpen: function (selectedDates, dateStr, instance) {
+                        // Nếu input ở trạng thái readonly, đóng date table
+                        if (instance.input.hasAttribute("readonly")) {
+                            instance.close(); // Đóng bảng chọn ngày
+                        }
+                    },
+                });
+                flatpickr("#ShipmentDate", {
+                    dateFormat: "H:i:S d/m/Y",  // Định dạng ngày
+                    maxDate: "today",
+                    enableTime: true,
+                    enableSeconds: true,
+                    time_24hr: true,  // Định dạng 24 giờ
+                    onOpen: function (selectedDates, dateStr, instance) {
+                        // Nếu input ở trạng thái readonly, đóng date table
+                        if (instance.input.hasAttribute("readonly")) {
+                            instance.close(); // Đóng bảng chọn ngày
+                        }
+                    },
+                });
+                flatpickr("#FinishDate", {
+                    dateFormat: "H:i:S d/m/Y",  // Định dạng ngày
+                    maxDate: "today",
+                    enableTime: true,
+                    enableSeconds: true,
+                    time_24hr: true,  // Định dạng 24 giờ
+                    onOpen: function (selectedDates, dateStr, instance) {
+                        // Nếu input ở trạng thái readonly, đóng date table
+                        if (instance.input.hasAttribute("readonly")) {
+                            instance.close(); // Đóng bảng chọn ngày
+                        }
+                    },
+                });
+            }
+
+            // Hàm xử lí khi người dùng click tăng hoặc giảm số lượng
+            const handleAjustFoodAmount = () => {
+                $(".amount-btn").on("click", function (e) {
+                    e.preventDefault()
+                    let amountField = $(this).closest(".col").find("span")
+                    let priceField = $(this).closest(".row").find(".price-col")
+
+                    // Gửi yêu cầu AJAX POST
+                    let myPromise = new Promise((resolve, reject) => {
+                        let newAmount = $(this).attr("data-adjust") == "minus" ? parseInt(amountField.text()) - 1 : parseInt(amountField.text()) + 1
+                        let formData = new FormData()
+
+                        formData.append("OrderID", amountField.attr("data-order-id"))
+                        formData.append("FoodID", amountField.attr("data-food-id"))
+                        formData.append("Amount", newAmount)
+                        formData.append("NewPrice", amountField.attr("data-price"))
+
+                        // Duyệt qua các trường trong form và lấy dữ liệu
+                        for (var [key, value] of formData.entries()) {
+                            console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                        }
+
+                        $.ajax({
+                            url: '/Admin/Order/UpdateOrderDetails', // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: formData,
+                            contentType: false,  // Đảm bảo không thay đổi content-type
+                            processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                            dataType: 'json',
+                            success: function (response) {
+                                console.log(response)
+                                resolve(response)
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((data) => {
+                        amountField.text(data.amount)
+                        priceField.text(data.price.toLocaleString() + " VNĐ")
+                    })
+                })
+            }
+
+            // Định nghĩa hàm toggle ẩn hiện các elem
+            const toggleFunc = () => {
+                editBtn.toggleClass('visually-hidden')
+                cancelBtn.toggleClass('visually-hidden')
+                saveBtn.toggleClass('visually-hidden')
+                backBtn.toggleClass('visually-hidden')
+
+                inputs.each(function (i, input) {
+                    if ($(input).attr('data-lock') == undefined)
+                        $(input).prop('readonly', !$(input).prop('readonly'))
+                })
+
+                if (selectInput.css('pointer-events') == 'none')
+                    selectInput.css('pointer-events', 'unset')
+                else
+                    selectInput.css('pointer-events', 'none')
+            }
+
+            // Định nghĩa hàm để lấy data từ server
+            const getData = () => {
+                // Lấy đường dẫn hiện tại
+                const path = window.location.pathname;
+
+                // Tách đường dẫn thành các phần tử dựa vào dấu "/"
+                const segments = path.split('/');
+
+                // Giả sử ID nằm ở phần cuối của URL
+                const uid = segments[segments.length - 1];
+
+                return new Promise((resolve) => {
+                    $.ajax({
+                        url: `/Admin/Order/GetOrderFoodList`, // URL đến controller action
+                        type: 'GET', // Phương thức HTTP
+                        data: { id: uid },
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response)
+                            resolve(response)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+            }
+
+            const getInputData = () => {
+                srcData.inputData = {}
+
+                $.each(inputs, function (i, input) {
+                    if ($(input).attr("data-lock") == undefined)
+                        srcData.inputData[$(input).attr("name")] = $(input).val()
+                })
+
+                $.each(selectInput, function (i, input) {
+                    srcData.inputData[$(input).attr("name")] = $(input).val()
+                })
+                console.log(srcData)
+            }
+
+            // Định nghĩa hàm để render dữ liệu ra màn hình
+            const render = () => {
+                // Khởi tạo trước table header row
+                let htmls = `<div class="row py-2 border-bottom text-primary flex-nowrap">
+                            <div class="col-1">
+                                STT
+                            </div>
+                            <div class="col">
+                                Mã món
+                            </div>
+                            <div class="col">
+                                Tên món
+                            </div>
+                            <div class="col">
+                                Loại món
+                            </div>
+                            <div class="col">
+                                Đơn giá gốc
+                            </div>
+                            <div class="col">
+                                Đơn giá mới
+                            </div>
+                            <div class="col">
+                                Số lượng
+                            </div>
+                            <div class="col">
+                                Thành tiền
+                            </div>
+                            <div class="col">
+                                Action
+                            </div>
+                        </div>`
+
+                foodTable.empty()
+
+                foodTable.append(htmls)
+
+                // Khởi tạo các biến đếm để thống kê
+                let totalAmount = 0, totalPrice = 0, totalNewPrice = 0;
+
+                // Render các row còn lại
+                $.each(srcData.foodList, (i, Food) => {
+                    let newPrice = parseInt(Food["NewPrice"].replace(' VNĐ', '').replace(/,/g, ''))
+
+                    let price = newPrice * Food["Amount"]
+                    let roleid = "@roleID"
+                    htmls = `
+                        <div class="row py-2 border-bottom flex-nowrap">
+                            <div class="col-1">
+                                ${i + 1}
+                            </div>
+                            <div class="col">
+                                ${Food["FoodID"]}
+                            </div>
+                            <div class="col">
+                                ${Food["FoodName"]}
+                            </div>
+                            <div class="col">
+                                ${Food["FoodCategoryName"]}
+                            </div>
+                            <div class="col">
+                                ${Food["FoodPrice"]}
+                            </div>
+                            <div class="col">
+                                ${Food["NewPrice"]}
+                            </div>
+                            <div class="col d-flex">
+                                ${roleid == "ADMIN" ? `
+                                    <a class="px-2 amount-btn" href="#" data-adjust="minus">
+                                        <i class='bx bx-minus-circle'></i>
+                                    </a>` : ""
+                                }
+                                <span data-order-id="@id" data-price=${newPrice} data-food-id=${Food["FoodID"]}>${Food["Amount"]}</span>
+                                ${roleid == "ADMIN" ? `
+                                    <a class="px-2 amount-btn" href="#" data-adjust="plus">
+                                        <i class='bx bx-plus-circle'></i>
+                                    </a>` : ""
+                                }
+
+                            </div>
+                            <div class="col price-col">
+                                ${price.toLocaleString()} VNĐ
+                            </div>
+                            <div class="col">
+                                ${roleid == "ADMIN" ? `
+                                    <div class = "btn btn-outline-danger" style = "padding: 2px 6px;" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="${Food["FoodID"]}">
+                                        <i class='bx bx-x'></i>
+                                    </div>` : ""
+                                }
+                            </div>
+                        </div>`
+
+                    foodTable.append(htmls)
+
+                    //xử lí các biến thống kê
+                    totalAmount += Food["Amount"]
+                    totalPrice += price
+                    totalNewPrice += newPrice
+                })
+
+                $("input[name=TotalPrice]").val(totalPrice)
+                $(`span[name=TotalPrice]`).text(totalPrice.toLocaleString() + " VNĐ")
+                $(".TotalPrice").text(totalPrice.toLocaleString() + " VNĐ")
+
+                htmls = `
+                    <div class="row py-2">
+                        <div class="col-1">
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                            ${totalPrice.toLocaleString()} VNĐ
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>`
+                foodTable.append(htmls)
+
+                // Tại vì khi render xong rồi mới xuất hiện các $(".amount-btn") nên phải khởi tạo khi đã render xong
+                // Khi nhấn nút tăng số lượng món ăn
+                handleAjustFoodAmount()
+            }
+
+            const resetValue = () => {
+                $.each(srcData.inputData, function (key, value) {
+                    $(`[name=${key}]`).val(value)
+                })
+            }
+
+            // HANDLE ALL EVENTS
+
+            handleDatePicker()
+
+            // Khởi tạo dữ liệu cho web
+            getData().then((data) => {
+                srcData.foodList = data
+                render()
+                getInputData()
+            })
+
+            // Khi nhấn nút edit
+            editBtn.click(function (e) {
+                // Thay thế hiển thị cho giá trị null (N/a) thành giá trị rỗng ""
+                inputs.each(function (i, input) {
+                    if ($(input).val() == "N/a" && $(input).attr('data-lock') == undefined)
+                        $(input).val("")
+                })
+                toggleFunc()
+
+            })
+
+            // Khi nhấn nút huỷ
+            cancelBtn.click(function (e) {
+                inputs.each(function (i, input) {
+                    if ($(input).val() == "")
+                        $(input).val("N/a")
+                })
+                render()
+                toggleFunc()
+                resetValue()
+            })
+
+            // Khi nhấn nút lưu
+            saveBtn.click(function (e) {
+                // Gửi yêu cầu AJAX POST
+                let myPromise = new Promise((resolve, reject) => {
+                    let formData = new FormData(editForm[0])
+
+                    // Duyệt qua các trường trong form và lấy dữ liệu
+                    for (var [key, value] of formData.entries()) {
+                        console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                    }
+
+                    $.ajax({
+                        url: '/Admin/Order/Edit', // URL đến controller action
+                        type: 'POST', // Phương thức HTTP
+                        data: formData,
+                        contentType: false,  // Đảm bảo không thay đổi content-type
+                        processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                        dataType: 'json',
+                        success: function (response) {
+                            resolve(response)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+
+                myPromise.then(() => {
+                    getData().then((data) => {
+                        srcData = data
+                        toggleFunc()
+                        render()
+                        getInputData()
+                    })
+                })
+            })
+
+            // Khi nhấn nút thêm món vào đơn ĐH
+            addFoodBtn.click(function (e) {
+                // Gửi yêu cầu AJAX POST
+                let myPromise = new Promise((resolve, reject) => {
+                    let formData = new FormData(addFoodForm[0])
+
+                    // Duyệt qua các trường trong form và lấy dữ liệu
+                    for (var [key, value] of formData.entries()) {
+                        console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                    }
+
+                    $.ajax({
+                        url: '/Admin/Order/AddFood', // URL đến controller action
+                        type: 'POST', // Phương thức HTTP
+                        data: formData,
+                        contentType: false,  // Đảm bảo không thay đổi content-type
+                        processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                        dataType: 'json',
+                        success: function (response) {
+                            resolve(response)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+
+                myPromise.then(() => {
+                    getData().then((data) => {
+                        srcData = data
+                        render()
+                    })
+                })
+            })
+
+            // Xử lý click vào nút delete sẽ popup lên modal confirm delete
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var foodid = btn.getAttribute('data-bs-id')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+                var submitBtn = modalForm.find(".delete-btn")
+
+                modalContent.text(`Bạn có chắc chắn muốn xoá món ${foodid} này không?`)
+
+                modalTitle.text('Xoá Món ' + foodid)
+
+                submitBtn.click(function (e) {
+                    // Gửi yêu cầu AJAX POST
+                    let myPromise = new Promise((resolve, reject) => {
+                        let formData = new FormData()
+
+                        formData.append("OrderID", "@id")
+                        formData.append("FoodID", foodid)
+
+                        // Duyệt qua các trường trong form và lấy dữ liệu
+                        for (var [key, value] of formData.entries()) {
+                            console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                        }
+
+                        $.ajax({
+                            url: '/Admin/Order/RemoveFood', // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: formData,
+                            contentType: false,  // Đảm bảo không thay đổi content-type
+                            processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                            dataType: 'json',
+                            success: function (response) {
+                                console.log(response)
+                                resolve(response)
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((data) => {
+                        // Khởi tạo dữ liệu cho web
+                        getData().then((data) => {
+                            srcData = data
+                            render()
+                        })
+                    })
+                })
+            })
+        })
+    </script>
+}
+
+@section Link {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+}

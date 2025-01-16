@@ -1,0 +1,252 @@
+﻿@*/Admin/Food*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.Food>
+
+@{
+    ViewBag.Title = "Index";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
+    var id = Request.RequestContext.RouteData.Values["id"];
+
+    var user = (QuanLyBanGaRan_64131011.Models.AppUser)HttpContext.Current.Session["user"];
+    var uName = user.FullName;
+    var roleID = user.RoleID;
+}
+
+@*FILTER*@
+<div class="body-content bg-white p-4 container rounded">
+
+    @*Khu vực filter*@
+    <section class="d-flex flex-column">
+        <form class="py-3 fw-bolder d-flex flex-column w-100" method="get" action="">
+            <div class="d-flex w-100">
+                <div class="rounded-start d-flex justify-content-center align-items-center px-4 border">
+                    <i class='bx bx-filter-alt fs-3'></i>
+                </div>
+
+                <div class="d-flex flex-column flex-fill container">
+                    @*FILTER ROW 1*@
+                    <div class="row flex-column flex-lg-row">
+                        <div class="col-lg-3 col p-0 border">
+                            <input list="fnList" value="@ViewBag.fn" type="text" name="fn" class="px-2 py-2 w-100 border-0" placeholder="Tên món" />
+                        </div>
+
+                        <div class="col-lg-2 col p-0 border">
+                            @Html.DropDownList("ft", null, htmlAttributes: new { @class = "border-0 px-2 py-2 w-100" })
+                        </div>
+                        <div class="col-lg-7 col p-0 d-flex justify-content-around align-items-center border">
+                            <input type="hidden" value="@ViewBag.fps" name="fps" id="startValueInput" />
+                            <input type="hidden" value="@ViewBag.fpe" name="fpe" id="endValueInput" />
+                            <label id="startValue">@ViewBag.fps</label>
+                            <div style="height:4px; width: 60%" id="slider"></div>
+                            <label id="endValue">@ViewBag.fpe</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Action BTN*@
+            <div class="d-flex mt-3 justify-content-end w-100">
+                <div class="d-flex">
+                    <a href="/Admin/Food" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-danger me-3 rounded">
+                        <i class='bx bx-reset fs-3'></i>
+                    </a>
+                    <button type="submit" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-success rounded">
+                        <i class='bx bx-check fs-3'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</div>
+
+<div class="body-content bg-white p-4 mt-4 container rounded">
+
+    @*Khu vực dưới header*@
+    <section class="d-flex justify-content-between py-2 mb-2">
+
+        @*Thanh breadcrumb để định hướng*@
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @if (id != null)
+                {
+                    <li class="breadcrumb-item"><a href="../">@ViewBag.header</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@id</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.header</li>
+                }
+            </ol>
+        </nav>
+
+        @*Khu vực modal và btn để thêm món mới*@
+        <div class="">
+            @if (roleID == "ADMIN")
+            {
+                <btn class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                    Thêm món mới
+                </btn>
+            }
+
+
+            @*Modal thêm món*@
+            <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form id="create-form" class="modal-content" method="post" action="/Admin/Food/Create" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">THÊM MÓN MỚI</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row row-cols-2">
+                            @*Cột thứ nhất*@
+                            <div class="d-flex flex-column details-group col">
+                                <label for="name">Tên món</label>
+                                <input id="name" data-vtype="Required" name="FoodName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="units">Đơn vị tính</label>
+                                <input id="units" data-vtype="Required" name="FoodUnits" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="foodCategory">Loại món</label>
+                                @Html.DropDownList("FoodCategoryID", null, htmlAttributes: new { @class = "px-3 py-1 mt-2 ms-1 rounded-3", @id = "foodCategory", @style = "width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" })
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="price">Giá gốc</label>
+                                <input data-vtype="Required" type="number" id="price" name="FoodPrice" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col-12">
+                                <label for="foodPic">Ảnh món</label>
+                                <input data-vtype="Required" accept="image/*" type="file" id="foodPic" name="FoodImage" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 100%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col-12">
+                                <label for="foodDes">Mô tả về món</label>
+                                <textarea id="foodDes" name="FoodDetails" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 100%;min-height: 2rem;border: rgba(1, 1, 1, 0.2) 1px solid;"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    @*Khu vực của web grid (danh sách các khách hàng)*@
+    @grid.GetHtml(
+        tableStyle: "table",
+        headerStyle: "thead-dark",
+        footerStyle: "tfoot-style",
+        columns: grid.Columns(
+            grid.Column("FoodID", header: "Mã Món"),
+            grid.Column("FoodName", header: "Tên món"),
+            grid.Column("FoodPrice", header: "Giá gốc", format: @<text>@item.FoodPrice.ToString("N0") VNĐ</text>),
+grid.Column("FoodUnits", header: "Đơn vị"),
+grid.Column("FoodCategory", header: "Loại món", format: @<text>@item.FoodCategory.FoodCategoryName</text>),
+grid.Column(header: "", format:
+@<text>
+    @*Btn chuyển đến trang details*@
+    <a href="/Admin/Food/Details/@item.FoodID" class="btn btn-outline-primary btn-sm">
+        <i class='bx bx-detail'></i>
+    </a>
+    @if (roleID == "ADMIN")
+    {
+        @*Btn xoá khách hàng*@
+        <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="@item.FoodID" data-bs-name="@item.FoodName">
+            <i class='bx bx-x'></i>
+        </a>
+    }
+
+</text>
+)
+)
+)
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        Bạn có chắc chắn muốn xoá món này ra khỏi thực đơn không?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Slider để set khoảng thời gian
+        const slider = document.getElementById("slider");
+        const startValue = document.getElementById("startValue");
+        const endValue = document.getElementById("endValue");
+        const startValueInput = document.getElementById("startValueInput");
+        const endValueInput = document.getElementById("endValueInput");
+
+        // Khởi tạo range slider
+        noUiSlider.create(slider, {
+            start: [@ViewBag.fps, @ViewBag.fpe],
+            connect: true,
+            range: {
+                min: 0,
+                max: @ViewBag.MaxFP,
+            },
+            step: 5000,
+        });
+
+        // Lắng nghe hành vi kéo 2 đầu slider
+        slider.noUiSlider.on("update", function (values) {
+            startValue.textContent = parseFloat(values[0]).toLocaleString() + " VNĐ";
+            endValue.textContent = parseFloat(values[1]).toLocaleString() + " VNĐ";
+
+            // Cập nhật input ẩn để submit form
+            startValueInput.value = parseInt(values[0]);
+            endValueInput.value = parseInt(values[1]);
+        });
+
+
+        $(document).ready(function () {
+            const deleteModal = $('#deleteModal')
+
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var foodid = btn.getAttribute('data-bs-id')
+                var foodname = btn.getAttribute('data-bs-name')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+
+                modalContent.text(`Bạn có chắc chắn muốn xoá món ${foodname} (${foodid}) không?`)
+                modalForm.attr('action', `/Admin/Food/Delete/${foodid}`)
+
+                modalTitle.text('Xoá khách hàng ' + foodid)
+            })
+        });
+    </script>
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#create-form")
+
+        validate(mainForm)
+    </script>
+}
+
+@section Link {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+}

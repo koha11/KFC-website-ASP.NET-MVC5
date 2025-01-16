@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<section class="py-4 px-lg-5 px-2 container">
+    <div class="flex-column-reverse flex-lg-row row">
+        <div class="px-2 col-lg-5 col">
+            <img src="~/Images/signin.jpg" class="w-100" />
+        </div>
+        <form action="" method="post" class="px-3 py-4 col-lg-7 col" id="otp-form">
+            <h3 class="fw-bolder">XÁC NHẬN MÃ OTP</h3>
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal w-100 d-flex flex-column py-3 px-4">
+
+                <div class="d-flex">
+                    <input class="otp-input" type="number" style="width: 40px"/>
+                    <input class="otp-input" type="number" style="width: 40px"/>
+                    <input class="otp-input" type="number" style="width: 40px"/>
+                    <input class="otp-input" type="number" style="width: 40px"/>
+                    <input class="otp-input" type="number" style="width: 40px"/>
+                    <input class="otp-input" type="number" style="width: 40px"/>
+                </div>
+
+
+                <div class="py-4 d-flex justify-content-around" style="justify-content: end">
+                    <input type="button" value="Xác nhận" id="submit-btn" class="btn btn-primary ms-4" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const btn = $('#submit-btn')
+            const inputs = $('.otp-input')
+            const loader = $("#loading-container")
+
+
+            btn.click(() => {
+                let otp = ""
+                inputs.each((i, input) => {
+                    otp += $(input).val()
+                })
+                console.log(otp)
+                let myPromise = new Promise((resolve) => {
+                    $.ajax({
+                        url: `/AccountManager_64131011/Otp`, // URL đến controller action
+                        type: 'GET', // Phương thức HTTP
+                        data: {
+                            otp: otp,
+                            uid: "@ViewBag.uid"
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            loader.toggleClass("visually-hidden")
+                            console.log(response)
+                            resolve(response)
+                        },
+                        beforeSend: function () {
+                            loader.toggleClass("visually-hidden")
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+
+                myPromise.then((res) => {
+                    if (res.isValid == true)
+                        window.location.href("/")
+                    else {
+                        console.log("lỗi rồi")
+                    }
+                })
+            })
+        })
+    </script>    
+}

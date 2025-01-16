@@ -1,0 +1,407 @@
+﻿@*/Menu*@
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.Food>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = HttpContext.Current.Session["user"] as QuanLyBanGaRan_64131011.Models.AppUser;
+    var uid = user != null ? user.UserID : "";
+}   
+
+<nav id="food-category-navbar" class="navbar sticky-top bg-white w-100 border-bottom border-top" style="top: 10vh">
+
+    <!-- Swiper Container -->
+    <div class="swiper fw-bold text-uppercase container">
+        <div class="swiper-wrapper d-flex align-items-center px-4">
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#uu-dai">Ưu đãi</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#mon-moi">Món mới</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#combo-1-nguoi">Combo 1 người</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#combo-nhom">Combo nhóm</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#ga-ran-ga-quay">Gà rán - gà quay</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#burger-com-mi-y">Burger - Cơm - Mì Ý</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#thuc-an-nhe">Thức ăn nhẹ</a>
+            </div>
+
+            <div class="swiper-slide">
+                <a class="nav-link" href="#thuc-uong-trang-mieng">Thức uống & tráng miệng</a>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="swiper-button-next pe-4" style="color:var(--main-color); bottom: 0; right: 0"></div>
+        <div class="swiper-button-prev ps-4" style="color: var(--main-color); bottom: 0; left: 0"></div>
+    </div>
+</nav>
+<div data-bs-spy="scroll" id="category-scrollpy" data-bs-target="#navbar-example2" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+    @*Scrollpy Ưu đãi*@
+    <div class="py-4 container" id="uu-dai">
+        <h3 class="text-uppercase">Ưu đãi</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000001")
+                {
+                    var newPrice = food.FoodPrice * (1 - food.FoodPromotions.Where(fp => fp.DateEnd >= DateTime.Now).FirstOrDefault().Promotion.Discount);
+
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div>@newPrice.ToString("N0") VNĐ</div>
+                                        <div class="text-decoration-line-through">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Món mới*@
+    <div class="py-4 container" id="mon-moi">
+        <h3 class="text-uppercase">Món mới</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000002")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Combo 1 người*@
+    <div class="py-4 container" id="combo-1-nguoi">
+        <h3 class="text-uppercase">Combo 1 người</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000003")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Combo nhóm*@
+    <div class="py-4 container" id="combo-nhom">
+        <h3 class="text-uppercase">Combo nhóm</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000004")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Gà Rán - Gà Quay*@
+    <div class="py-4 container" id="ga-ran-ga-quay">
+        <h3 class="text-uppercase">Gà Rán - Gà Quay</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000005")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Burger - Cơm - Mì Ý*@
+    <div class="py-4 container" id="burger-com-mi-y">
+        <h3 class="text-uppercase">Burger - Cơm - Mì Ý</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000006")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Thức Ăn Nhẹ*@
+    <div class="py-4 container" id="thuc-an-nhe">
+        <h3 class="text-uppercase">Thức Ăn Nhẹ</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000007")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @*Scrollpy Thức Uống & Tráng Miệng*@
+    <div class="py-4 container" id="thuc-uong-trang-mieng">
+        <h3 class="text-uppercase">Thức Uống & Tráng Miệng</h3>
+        <div class="row row-cols-lg-4 g-4">
+            @foreach (var food in Model)
+            {
+                if (food.FoodCategoryID == "FC000008")
+                {
+                    <div class="col-lg col-6">
+                        <div class="card h-100 card-title" data-fid="@food.FoodID">
+                            <img src="~/Images/@food.FoodImage" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="fw-bold d-flex justify-content-between align-items-baseline">
+                                    <span>
+                                        @food.FoodName
+                                    </span>
+                                    <div>
+                                        <div class="">@food.FoodPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                                <div class="py-2">@food.FoodDetails</div>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn text-white rounded-pill px-4 py-2 add-btn" style="background-color: var(--main-color)" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        // Swiper Initialization
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 'auto', // Hiển thị 5 card cùng lúc
+            spaceBetween: 48, // Khoảng cách giữa các card
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            loop: false, // Lặp lại slider
+            autoplay: false,
+            freeMode: true
+        });
+
+        $(document).ready(function () {
+            const loader = $("#loading-container")            
+
+            const successPopup = $("#successful-container")
+
+            const addBtns = $(".add-btn")
+
+            const popupMsg = (msg) => {
+                let msgContainer = successPopup.find("span")
+                msgContainer.text(msg)
+
+                successPopup.toggleClass("visually-hidden")
+                setTimeout(() => successPopup.toggleClass("visually-hidden"), 2000)
+            }
+
+            addBtns.each((index, btn) => {
+                $(btn).click((e) => {
+                    const uid = "@uid"
+
+                    if (uid == "") {
+                        window.location.href = "/Login"
+                        return
+                    }                    
+
+                    const foodCard = $(btn).closest(".card")
+
+                    const fid = foodCard.data("fid")
+
+                    let myPromise = new Promise((resolve) => {
+                        $.ajax({
+                            url: `/Cart/AddFood`, // URL đến controller action
+                            type: 'POST', // Phương thức HTTP                      
+                            data: {
+                                FoodID: fid,
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                loader.toggleClass("visually-hidden")
+                                console.log(response)
+                                resolve(response)
+                            },
+                            beforeSend: function () {
+                                loader.toggleClass("visually-hidden")
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((res) => {
+                        const cartBtn = $(".cart-btn span")
+                        const amount = parseInt($(cartBtn[0]).text())
+
+                        popupMsg("Bạn đã thêm món thành công")
+
+                        $(cartBtn[0]).text(amount + 1)
+                        $(cartBtn[1]).text(amount + 1)
+                    }) 
+                })
+            })
+
+        })
+    </script>
+}
+
+@section Links {
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+}

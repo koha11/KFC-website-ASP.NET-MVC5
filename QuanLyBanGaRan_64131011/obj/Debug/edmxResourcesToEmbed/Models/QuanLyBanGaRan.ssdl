@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QuanLyBanGaRan_64131011Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AppRole">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="char" MaxLength="8" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AppUser">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="char" MaxLength="8" Nullable="false" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="256" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="256" />
+    <Property Name="Phone" Type="char" MaxLength="10" />
+    <Property Name="CCCD" Type="char" MaxLength="12" />
+    <Property Name="Username" Type="char" MaxLength="30" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="RoleID" Type="char" MaxLength="8" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__AppUser__RoleID__7C4F7684">
+    <End Role="AppRole" Type="Self.AppRole" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AppRole">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="AppUser">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QuanLyBanGaRan_64131011ModelStoreContainer">
+    <EntitySet Name="AppRole" EntityType="Self.AppRole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__AppUser__RoleID__7C4F7684" Association="Self.FK__AppUser__RoleID__7C4F7684">
+      <End Role="AppRole" EntitySet="AppRole" />
+      <End Role="AppUser" EntitySet="AppUser" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,238 @@
+﻿@*/Admin/Customer*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.AppUser>
+
+@{
+    ViewBag.Title = "Index";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
+    var id = Request.RequestContext.RouteData.Values["id"];
+
+    var fnList = Model.Select(u => u.FullName).ToList();
+    var phoneList = Model.Select(u => u.Phone).ToList();
+    var mailList = Model.Select(u => u.Email).ToList();
+    var addrList = Model.Select(u => u.Address).ToList();
+}
+
+@*FILTER*@
+<div class="body-content bg-white p-4 container rounded">
+
+    @*Khu vực filter*@
+    <section class="d-flex flex-column">
+        <form class="py-3 fw-bolder d-flex flex-column w-100" method="get" action="">
+            <div class="d-flex w-100">
+                <div class="rounded-start d-flex justify-content-center align-items-center px-4 border">
+                    <i class='bx bx-filter-alt fs-3'></i>
+                </div>
+
+                <div class="d-flex flex-column flex-fill container">
+                    @*FILTER ROW 1*@
+                    <div class="row flex-column flex-lg-row">
+                        <div class="col-lg-3 col p-0 border">
+                            <input list="fnList" value="@ViewBag.fn" type="text" name="fn" class="px-2 py-2 w-100 border-0" placeholder="Họ và Tên khách hàng" />
+                            <datalist id="fnList">
+                                @foreach (var fn in fnList)
+                                {
+                                    <option value="@fn"></option>
+                                }
+                            </datalist>
+                        </div>
+
+                        <div class="col-lg-2 col p-0 border">
+                            <input list="phoneList" value="@ViewBag.phone" type="text" name="phone" class="px-2 py-2 w-100 border-0" placeholder="Số điện thoại" />
+                            <datalist id="phoneList">
+                                @foreach (var ph in phoneList)
+                                {
+                                    <option value="@ph"></option>
+                                }
+                            </datalist>
+                        </div>
+
+                        <div class="col-lg-3 col p-0 border">
+                            <input list="mailList" value="@ViewBag.mail" type="text" name="mail" class="px-2 py-2 w-100 border-0" placeholder="Email" />
+                            <datalist id="mailList">
+                                @foreach (var mail in mailList)
+                                {
+                                    <option value="@mail"></option>
+                                }
+                            </datalist>
+                        </div>
+
+                        <div class="col-lg-4 col p-0 border">
+                            <input list="addrList" value="@ViewBag.addr" type="text" name="addr" class="px-2 py-2 w-100 border-0" placeholder="Địa chỉ" />
+                            <datalist id="addrList">
+                                @foreach (var addr in addrList)
+                                {
+                                    <option value="@addr"></option>
+                                }
+                            </datalist>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Action BTN*@
+            <div class="d-flex mt-3 justify-content-end w-100">
+                <div class="d-flex">
+                    <a href="/Admin/Customer" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-danger me-3 rounded">
+                        <i class='bx bx-reset fs-3'></i>
+                    </a>
+                    <button type="submit" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-success rounded">
+                        <i class='bx bx-check fs-3'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</div>
+
+<div class="body-content bg-white p-4 mt-4 container rounded">
+
+    @*Khu vực dưới header*@
+    <section class="d-flex justify-content-between py-2 mb-2">
+
+        @*Thanh breadcrumb để định hướng*@
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @if (id != null)
+                {
+                    <li class="breadcrumb-item"><a href="../">@ViewBag.header</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@id</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.header</li>
+                }
+            </ol>
+        </nav>
+
+        @*Khu vực modal và btn để thêm khách hàng mới*@
+        <div class="">
+            <btn class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                Thêm khách hàng mới
+            </btn>
+
+            @*Modal thêm khách hàng*@
+            <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form id="create-form" class="modal-content" method="post" action="/Admin/Customer/Create" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">THÊM KHÁCH HÀNG MỚI</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row row-cols-2">
+
+                            <div class="d-flex flex-column details-group col">
+                                <label for="fullname">Họ và tên khách hàng</label>
+                                <input id="fullname" data-vtype="Required-NotNumber" name="FullName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="phone">Số điện thoại</label>
+                                <input id="phone" data-vtype="Required-Phone" name="Phone" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="email">Email</label>
+                                <input id="email" data-vtype="Required-Mail" name="Email" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="address">Địa chỉ</label>
+                                <input id="address" data-vtype="Required" name="Address" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="username">Tên tài khoản</label>
+                                <input id="username" data-vtype="Required-MinLength_6" name="Username" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="pwd">Mật khẩu</label>
+                                <input id="pwd" data-vtype="Required-MinLength_6" name="Password" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" type="password" />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    @*Khu vực của web grid (danh sách các khách hàng)*@
+    @grid.GetHtml(
+        tableStyle: "table",
+        headerStyle: "thead-dark",
+        footerStyle: "tfoot-style",
+        columns: grid.Columns(
+            grid.Column("UserID", header: "Mã KH"),
+            grid.Column("FullName", header: "Họ và tên"),
+            grid.Column("Email", header: "Email"),
+            grid.Column("Address", header: "Địa chỉ"),
+    grid.Column("Phone", header: "Số điện thoại"),
+grid.Column(header: "", format:
+@<text>
+    @*Btn chuyển đến trang details*@
+    <a href="/Admin/Customer/Details/@item.UserID" class="btn btn-outline-primary btn-sm">
+        <i class='bx bx-detail'></i>
+    </a>
+    @*Btn xoá khách hàng*@
+    <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="@item.UserID" data-bs-name="@item.Fullname">
+        <i class='bx bx-x'></i>
+    </a>
+</text>
+)
+)
+)
+
+    @*Modal xoá khách hàng*@
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        Bạn có chắc chắn muốn xoá khách hàng này không
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+            const deleteModal = $('#deleteModal')
+
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var userid = btn.getAttribute('data-bs-id')
+                var userfn = btn.getAttribute('data-bs-name')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+
+                modalContent.text(`Bạn có chắc chắn muốn xoá khách hàng ${userfn} (${userid}) không?`)
+                modalForm.attr('action', `/Admin/Customer/Delete/${userid}`)
+
+                modalTitle.text('Xoá khách hàng ' + userid)
+            })
+        });
+    </script>
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#create-form")
+        validate(mainForm)
+    </script>
+}

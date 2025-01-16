@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="QuanLyBanGaRan_64131011ModelStoreContainer" CdmEntityContainer="QuanLyBanGaRan_64131011Entities">
+    <EntitySetMapping Name="AppRoles">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.AppRole">
+        <MappingFragment StoreEntitySet="AppRole">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AppUsers">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.AppUser">
+        <MappingFragment StoreEntitySet="AppUser">
+          <ScalarProperty Name="IsActived" ColumnName="IsActived" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="CCCD" ColumnName="CCCD" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Foods">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.Food">
+        <MappingFragment StoreEntitySet="Food">
+          <ScalarProperty Name="FoodCategoryID" ColumnName="FoodCategoryID" />
+          <ScalarProperty Name="FoodImage" ColumnName="FoodImage" />
+          <ScalarProperty Name="FoodUnits" ColumnName="FoodUnits" />
+          <ScalarProperty Name="FoodPrice" ColumnName="FoodPrice" />
+          <ScalarProperty Name="FoodDetails" ColumnName="FoodDetails" />
+          <ScalarProperty Name="FoodName" ColumnName="FoodName" />
+          <ScalarProperty Name="FoodID" ColumnName="FoodID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FoodCategories">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.FoodCategory">
+        <MappingFragment StoreEntitySet="FoodCategory">
+          <ScalarProperty Name="FoodCategoryName" ColumnName="FoodCategoryName" />
+          <ScalarProperty Name="FoodCategoryID" ColumnName="FoodCategoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FoodPromotions">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.FoodPromotion">
+        <MappingFragment StoreEntitySet="FoodPromotion">
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="FoodID" ColumnName="FoodID" />
+          <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Promotions">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.Promotion">
+        <MappingFragment StoreEntitySet="Promotion">
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="PromotionDetails" ColumnName="PromotionDetails" />
+          <ScalarProperty Name="PromotionName" ColumnName="PromotionName" />
+          <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerOrders">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.CustomerOrder">
+        <MappingFragment StoreEntitySet="CustomerOrder">
+          <ScalarProperty Name="VoucherID" ColumnName="VoucherID" />
+          <ScalarProperty Name="AcceptDate" ColumnName="AcceptDate" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+          <ScalarProperty Name="ShippedBy" ColumnName="ShippedBy" />
+          <ScalarProperty Name="AcceptedBy" ColumnName="AcceptedBy" />
+          <ScalarProperty Name="OrderedBy" ColumnName="OrderedBy" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+          <ScalarProperty Name="ShipmentDate" ColumnName="ShipmentDate" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderDetails">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.OrderDetail">
+        <MappingFragment StoreEntitySet="OrderDetail">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="FoodID" ColumnName="FoodID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vouchers">
+      <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.Voucher">
+        <MappingFragment StoreEntitySet="Voucher">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="OfferDetails" ColumnName="OfferDetails" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Condition" ColumnName="Condition" />
+          <ScalarProperty Name="VoucherID" ColumnName="VoucherID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

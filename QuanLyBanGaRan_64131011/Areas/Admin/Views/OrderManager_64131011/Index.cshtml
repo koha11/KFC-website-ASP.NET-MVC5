@@ -1,0 +1,457 @@
+﻿@*/Admin/Order*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.OrderViewModel_64131011>
+
+@{
+    ViewBag.Title = "Index";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
+    var id = Request.RequestContext.RouteData.Values["id"];
+    var user = (QuanLyBanGaRan_64131011.Models.AppUser)HttpContext.Current.Session["user"];
+    var uName = user.FullName;
+    var roleID = user.RoleID;
+
+    var cIDList = Model.Select(o => o.OrderedBy).Distinct().ToList();    // Lọc lấy mã KH
+    var aIDList = Model.Select(o => o.AcceptedBy).Distinct().ToList();    // Lọc lấy mã NV đã duyệt
+    var sIDList = Model.Select(o => o.ShippedBy).Distinct().ToList();    // Lọc lấy mã NV đã giao
+
+    var countC = cIDList.Count();
+    var countCO = Model.Count(o => o.Status == 3);
+    var countICO = Model.Count() - countCO;
+    var sumPrice = Model.Sum(o => o.TotalPrice);
+}
+
+<div class="body-content bg-white p-4 container rounded">
+
+    @*Khu vực filter*@
+    <section class="d-flex flex-column">
+        <form class="py-3 fw-bolder d-flex flex-column w-100" method="get" action="">
+            <div class="d-flex w-100">
+                <div class="rounded-start d-flex justify-content-center align-items-center px-2 border">
+                    <i class='bx bx-filter-alt fs-3'></i>
+                </div>
+                <div class="d-flex flex-column flex-fill container">
+                    @*FILTER ROW 1*@
+                    <div class="row flex-column flex-lg-row">
+                        <div class="col p-0 border">
+                            @Html.DropDownList("stt", null, htmlAttributes: new { @class = "border-0 px-2 py-2 w-100" })
+                        </div>
+
+                        <div class="col p-0 border">
+                            <input list="cidlist" value="@ViewBag.cid" type="text" name="cid" class="px-2 py-2 w-100 border-0" placeholder="Mã khách hàng" />
+                            <datalist id="cidlist">
+                                @foreach (var cid in cIDList)
+                                {
+                                    <option value="@cid"></option>
+                                }
+                            </datalist>
+                        </div>
+
+                        <div class="col p-0 border">
+                            <input list="aidlist" value="@ViewBag.aid" type="text" name="aid" class="px-2 py-2 w-100 border-0" placeholder="Mã NV duyệt" />
+                            <datalist id="aidlist">
+                                @foreach (var aid in aIDList)
+                                {
+                                    <option value="@aid"></option>
+                                }
+                            </datalist>
+                        </div>
+
+                        <div class="col p-0 border">
+                            <input list="sidlist" value="@ViewBag.sid" type="text" name="sid" class="px-2 py-2 w-100 border-0" placeholder="Mã NV giao" />
+                            <datalist id="sidlist">
+                                @foreach (var sid in sIDList)
+                                {
+                                    <option value="@sid"></option>
+                                }
+                            </datalist>
+                        </div>
+
+                    </div>
+
+                    @*FILTER ROW 2*@
+                    <div class="row mt-lg-3 flex-column flex-lg-row">
+                        @*Chọn ngày*@
+                        <div class="col p-0 border">
+                            <input id="orderDateStart" type="text" name="ods" class="px-2 py-2 w-100 border-0" placeholder="Ngày đầu" />
+                        </div>
+
+                        @*Chọn ngày*@
+                        <div class="col p-0 border">
+                            <input id="orderDateEnd" type="text" name="ode" class="px-2 py-2 w-100 border-0" placeholder="Ngày cuối" />
+                        </div>
+
+                        @*range slider*@
+                        <div class="col p-0 m-0 row justify-content-center align-items-center px-2 py-2 border">
+                            <input type="hidden" value="@ViewBag.ots" name="ots" id="startTimeInput" />
+                            <input type="hidden" value="@ViewBag.ote" name="ote" id="endTimeInput" />
+                            <label class="col-2 p-0" id="startValue">@ViewBag.ots</label>
+                            <div class="col-8 p-0" style="height:4px" id="slider"></div>
+                            <label class="col-2 p-0" id="endValue">@ViewBag.ote</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @*Action BTN*@
+            <div class="d-flex mt-3 justify-content-between w-100">
+                <div class="d-flex w-50 justify-content-between">
+                    @if (roleID == "ADMIN")
+                    {
+                        <button type="button" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-primary rounded" data-bs-toggle="modal" data-bs-target="#createModal">
+                            Tạo đơn hàng mới
+                        </button>
+                    }
+
+                    @if (roleID == "MANAGER" || roleID == "ADMIN")
+                    {
+                        <a href="/Admin/Order/AcceptOrder" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-primary rounded">
+                            Duyệt đơn hàng
+                        </a>
+                    }
+
+                    @if (roleID == "SHIPPER" || roleID == "ADMIN")
+                    {
+                        <a href = "/Admin/Order/ShipOrder" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-primary rounded">
+                            Giao đơn hàng
+                        </a>
+                    }
+                </div>
+                <div class="d-flex">
+                    <a href="/Admin/Order" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-danger me-3 rounded">
+                        <i class='bx bx-reset fs-3'></i>
+                    </a>
+                    <button type="submit" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-success rounded">
+                        <i class='bx bx-check fs-3'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</div>
+
+@*Modal thêm đơn hàng*@
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 70%">
+        <form class="modal-content" id="create-form" method="post" action="/Admin/Order/Create">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">THÊM ĐƠN HÀNG</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body row">
+                @*Cột thứ nhất*@
+                <div class="d-flex flex-column col">
+                    <div class="d-flex flex-column details-group">
+                        <label for="OrderedBy">Mã khách hàng</label>
+                        <input list="OrderedByList" id="OrderedBy" name="OrderedBy" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                        <datalist id="OrderedByList">
+                            @foreach (var customerID in ViewBag.CustomerList)
+                            {
+                                <option value="@customerID"></option>
+                            }
+                        </datalist>
+                    </div>
+                    <div class="d-flex flex-column details-group">
+                        <label for="OrderDate">Thời gian đặt</label>
+                        <input type="datetime-local" id="OrderDate" name="OrderDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                    </div>
+                    <div class="d-flex flex-column details-group">
+                        <label for="FinishDate">Thời gian hoàn thành</label>
+                        <input type="datetime-local" id="FinishDate" name="FinishDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                    </div>
+                </div>
+
+                @*Cột thứ hai*@
+                <div class="d-flex flex-column col">
+                    <div class="d-flex flex-column details-group">
+                        <label for="AcceptedBy">Mã nhân viên duyệt</label>
+                        <input list="AcceptedByList" id="AcceptedBy" name="AcceptedBy" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                        <datalist id="AcceptedByList">
+                            @foreach (var managerID in ViewBag.ManagerList)
+                            {
+                                <option value="@managerID"></option>
+                            }
+                        </datalist>
+                    </div>
+                    <div class="d-flex flex-column details-group">
+                        <label for="AcceptDate">Thời gian duyệt</label>
+                        <input type="datetime-local" id="AcceptDate" name="AcceptDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                    </div>
+                    <div class="d-flex flex-column details-group">
+                        <label for="Status">Tình trạng</label>
+                        <select id="Status" name="Status" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;">
+                            <option value="0">Đang đặt</option>
+                            <option value="1">Chờ duyệt</option>
+                            <option value="2">Chờ giao</option>
+                            <option value="3">Đã hoàn thành</option>
+                        </select>
+                    </div>
+                </div>
+
+                @*Cột thứ ba*@
+                <div class="d-flex flex-column col">
+                    <div class="d-flex flex-column details-group">
+                        <label for="ShippedBy">Mã nhân viên giao</label>
+                        <input list="ShippedByList" id="ShippedBy" name="ShippedBy" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                        <datalist id="ShippedByList">
+                            @foreach (var shipperID in ViewBag.ShipperList)
+                            {
+                                <option value="@shipperID"></option>
+                            }
+                        </datalist>
+                    </div>
+                    <div class="d-flex flex-column details-group">
+                        <label for="ShipmentDate">Thời gian giao</label>
+                        <input type="datetime-local" id="ShipmentDate" name="ShipmentDate" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                <button type="submit" class="btn btn-primary">Thêm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@*Khu vực thống kê*@
+<div class="body-content mt-5 p-0 d-flex justify-content-between container">
+
+    @*SL KH*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>SL khách hàng</span>
+            <b>@countC</b>
+        </div>
+        <div>
+            <i class='bx bx-user-circle fs-1 text-primary'></i>
+        </div>
+    </div>
+
+    @*ĐH CHƯA HOÀN THÀNH*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Số ĐH chưa hoàn tất</span>
+            <b>@countICO</b>
+        </div>
+        <div>
+            <i class='bx bx-notepad fs-1'></i>
+        </div>
+    </div>
+
+    @*ĐH ĐÃ HOÀN THÀNH*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Số ĐH đã hoàn tất</span>
+            <b>@countCO</b>
+        </div>
+        <div>
+            <i class='bx bx-notepad fs-1 text-success'></i>
+        </div>
+    </div>
+
+    @*TỔNG TIỀN*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Số tiền thu được</span>
+            @if (sumPrice.HasValue == true)
+            {
+                <b>@sumPrice.Value.ToString("N0") VNĐ</b>
+            }
+            else
+            {
+                <b>0 VNĐ</b>
+            }
+
+        </div>
+        <div>
+            <i class='bx bx-coin fs-1 text-warning'></i>
+        </div>
+    </div>
+</div>
+
+@*Khu vực của web grid (danh sách các đơn hàng)*@
+<div class="body-content bg-white p-4 mt-5 container rounded">
+
+    @grid.GetHtml(
+        tableStyle: "table",
+        headerStyle: "thead-dark",
+        footerStyle: "tfoot-style",
+        columns: grid.Columns(
+            grid.Column("OrderID", header: "Mã Đơn"),
+            grid.Column("OrderedBy", header: "Mã KH"),
+            grid.Column("OrderDate", header: "Ngày đặt", format:
+                item =>
+                {
+                    DateTime? orderDate = item.OrderDate as DateTime?;
+                    return orderDate.HasValue
+                    ? orderDate.Value.ToString("dd/MM/yyyy")
+                    : "N/a";
+                }),
+            grid.Column("OrderTime", header: "Giờ đặt", format:
+                item =>
+                {
+                    DateTime? orderDate = item.OrderDate as DateTime?;
+                    return orderDate.HasValue
+                    ? orderDate.Value.ToString("HH:mm:ss")
+                    : "N/a";
+                }),
+            grid.Column("AcceptedBy", header: "NV duyệt", format: item => item.AcceptedBy == null ? "N/a" : item.AcceptedBy),
+            grid.Column("ShippedBy", header: "NV giao", format: item => item.ShippedBy == null ? "N/a" : item.ShippedBy),
+            grid.Column("CountFood", header: "Số lượng", format: @<text>@item.CountFood món</text>),
+grid.Column("TotalPrice", header: "Tổng tiền", format: item =>
+{
+var price = item.TotalPrice;
+if (price is null)
+return "N/a";
+else
+return price.ToString("N0") + " VNĐ";
+}),
+grid.Column("Status", header: "Trạng thái", format: item =>
+{
+var stt = item.Status;
+switch ((int)item.Status)
+{
+case 0:
+return Html.Raw("<span class='text-white rounded-pill bg-secondary h-100 d-block py-1 text-center'>Đang đặt</span>");
+case 1:
+return Html.Raw("<span class='text-white rounded-pill bg-warning h-100 d-block py-1 text-center'>Chờ duyệt</span>");
+case 2:
+return Html.Raw("<span class='text-white rounded-pill bg-danger h-100 d-block py-1 text-center'>Chờ giao</span>");
+case 3:
+return Html.Raw("<span class='text-white rounded-pill bg-success h-100 d-block py-1 text-center'>Đã hoàn thành</span>");
+default:
+return Html.Raw("<span class=''>Chưa xử lý</span>");
+}
+}),
+grid.Column(header: "", format:
+@<text>
+    @*Btn chuyển đến trang details*@
+    <a href="/Admin/Order/Details/@item.OrderID" class="btn btn-outline-primary btn-sm">
+        <i class='bx bx-detail'></i>
+    </a>
+    @if (roleID == "ADMIN")
+    {
+        @*Btn xoá đơn hàng*@
+        <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="@item.OrderID">
+            <i class='bx bx-x'></i>
+        </a>
+    }
+</text>
+)
+)
+)
+    @*Modal xoá đơn hàng*@
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        Bạn có chắc chắn muốn xoá khách hàng này không
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Slider để set khoảng thời gian
+        const slider = document.getElementById("slider");
+        const startValue = document.getElementById("startValue");
+        const endValue = document.getElementById("endValue");
+        const startTimeInput = document.getElementById("startTimeInput");
+        const endTimeInput = document.getElementById("endTimeInput");
+
+        // Đưa thời gian từ phút sang HH:mm:ss
+        function formatTime(value) {
+            const hours = Math.floor(value / 60);
+            const minutes = value % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        }
+
+        // Đổi từ HH:mm:ss sang phút
+        function unFormatTime(value) {
+            return parseInt(value.slice(0, 2)) * 60 + parseInt(value.slice(3, 5))
+        }
+
+        // Khởi tạo range slider
+        noUiSlider.create(slider, {
+            start: [unFormatTime("@ViewBag.ots"), unFormatTime("@ViewBag.ote")],
+            connect: true,
+            range: {
+                min: 0,
+                max: 1439,
+            },
+            step: 5,
+        });
+
+        // Lắng nghe hành vi kéo 2 đầu slider
+        slider.noUiSlider.on("update", function (values) {
+            startValue.textContent = formatTime(values[0]);
+            endValue.textContent = formatTime(values[1]);
+
+            // Cập nhật input ẩn để submit form
+            startTimeInput.value = formatTime(values[0]);
+            endTimeInput.value = formatTime(values[1]);
+        });
+
+        $(document).ready(function () {
+            const deleteModal = $('#deleteModal')
+
+            // Khởi tạo date picker
+            const handleDatePicker = () => {
+                flatpickr("#orderDateStart", {
+                    dateFormat: "d/m/Y",  // Định dạng ngày
+                    altInput: false,       // Hiển thị định dạng khác trên input
+                    altFormat: "F j, Y",  // Định dạng hiển thị
+                    minDate: "01012020",     // Ngày bắt đầu
+                    maxDate: "today",
+                    defaultDate: "@ViewBag.ods",
+                });
+                flatpickr("#orderDateEnd", {
+                     dateFormat: "d/m/Y",  // Định dạng ngày
+                     altInput: false,       // Hiển thị định dạng khác trên input
+                     altFormat: "F j, Y",  // Định dạng hiển thị
+                     minDate: "01012020",     // Ngày bắt đầu
+                     maxDate: "today",
+                     defaultDate: "@ViewBag.ode",
+                 });
+            }
+
+            handleDatePicker()
+
+            // Xử lý click vào nút delete sẽ popup lên modal confirm delete
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var orderid = btn.getAttribute('data-bs-id')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+
+                modalContent.text(`Bạn có chắc chắn muốn xoá đơn hàng ${orderid} không?`)
+                modalForm.attr('action', `/Admin/Order/Delete/${orderid}`)
+
+                modalTitle.text('Xoá đơn hàng ' + orderid)
+            })
+        });
+    </script>
+}
+
+
+@section Link {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+}

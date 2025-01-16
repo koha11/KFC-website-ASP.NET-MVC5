@@ -1,0 +1,335 @@
+﻿@*/Admin/Customer/Details/{id}*@
+
+@model QuanLyBanGaRan_64131011.Models.AppUser
+@{
+    ViewBag.Title = "Details";
+    var id = Request.RequestContext.RouteData.Values["id"];
+}
+
+<div class="body-content bg-white p-4 container rounded">
+    <section class="d-flex justify-content-between py-2 mb-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @if (id != null)
+                {
+                    <li class="breadcrumb-item"><a href="../">@ViewBag.header</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@id</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.header</li>
+                }
+            </ol>
+        </nav>
+    </section>
+
+    <section class="d-flex flex-column">
+        <form class="row row-cols-1 row-cols-lg-2" enctype="multipart/form-data" id="edit-form">
+            <div class="d-flex flex-column details-group col">
+                <label for="uid">Mã khách hàng</label>
+                <input value="@Model.UserID" id="uid" name="UserID" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+            </div>
+            <div class="d-flex flex-column details-group col">
+                <label for="fullname">Họ và tên khách hàng</label>
+                <input value="@Model.FullName" id="fullname" data-vtype="Required_NotNumber" name="FullName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+            </div>
+            <div class="d-flex flex-column details-group col">
+                <label for="email">Email</label>
+                <input value="@Model.Email" id="email" data-vtype="Required-Mail" name="Email" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+            </div>
+            <div class="d-flex flex-column details-group col">
+                <label for="address">Địa chỉ</label>
+                <input value="@Model.Address" id="address" data-vtype="Required" name="Address" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+            </div>
+            <div class="d-flex flex-column details-group col">
+                <label for="phone">Số điện thoại</label>
+                <input value="@Model.Phone" id="phone" data-vtype="Required-Phone" name="Phone" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+            </div>
+            <div class="d-flex flex-column details-group col">
+                <label for="username">Tên tài khoản</label>
+                <input value="@Model.Username" id="username" data-vtype="Required" name="Username" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+            </div>
+            <div class="d-flex flex-column details-group col">
+                <label for="isactived">Tình trạng tài khoản</label>
+                @Html.DropDownList("IsActived", null, htmlAttributes: new { @id = "roleid", @class = "px-3 py-1 mt-2 ms-1 rounded-3", @style = "width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid; pointer-events: none;" })
+
+            </div>
+        </form>
+
+        <div class="d-flex justify-content-end py-2 mt-4">
+            <button type="button" class="btn btn-outline-secondary mx-2 visually-hidden" id="cancel-btn">
+                Huỷ bỏ
+                <i class='bx bx-x'></i>
+            </button>
+
+            <button type="button" class="btn btn-outline-success mx-2 visually-hidden" id="save-btn">
+                Lưu lại
+                <i class='bx bx-check'></i>
+            </button>
+
+            <button type="button" class="btn btn-outline-primary mx-2" id="edit-btn">
+                Chỉnh sửa
+                <i class='bx bx-edit-alt'></i>
+            </button>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        const form = document.querySelector("#edit-form")
+        const inputs = form.querySelectorAll("input[data-vtype]")
+
+        const clearErrState = (input) => {
+            let inputContainer = input.closest("div")
+            let errMsg = inputContainer.querySelector(".err-msg")
+            if (errMsg)
+                errMsg.remove()
+            inputContainer.classList.remove("err")
+        }
+
+        const clearAllErrState = () => {
+            for (let input of inputs) {
+                clearErrState(input)
+            }
+        }
+
+        // Lặp qua các input để bỏ trạng thái lỗi khi focus hoặc nhập vào input
+        for (let input of inputs) {
+            input.addEventListener("change", function (e) {
+                clearErrState(input)
+            })
+            input.addEventListener("focus", function (e) {
+                clearErrState(input)
+            })
+        }
+
+        const validate = () => {
+
+            let isFormValid = true
+
+            for (let input of inputs) {
+                let types = input.dataset.vtype.split("-")
+                let val = input.value
+                let isInputValid = true
+
+                let errElm = document.createElement("span")
+                errElm.classList.add("err-msg")
+                let inputContainer = input.closest("div")
+                let errMsg = ""
+
+                for (let type of types) {
+                    if (!isInputValid)
+                        break
+
+                    let maxl, minl
+
+                    if (type.includes("MinLength")) {
+                        minl = parseInt(type.split("_")[1])
+                        type = "MinLength"
+                    }
+
+                    if (type.includes("MaxLength")) {
+                        minl = parseInt(type.split("_")[1])
+                        type = "MaxLength"
+                    }
+
+                    switch (type) {
+                        case "Required":
+                            if (val == "") {
+                                isInputValid = false
+                                errMsg = "Trường này là bắt buộc"
+                            }
+                            break
+                        case "NotNumber":
+                            for (let c of val)
+                                if (!isNaN(c) && c != " ") {
+                                    console.log(isNaN(c))
+                                    console.log(c)
+                                    isInputValid = false
+                                    errMsg = "Vui lòng không nhập số"
+                                    break;
+                                }
+                            break
+                        case "Mail":
+                            if (!val.match(/\b[A-Za-z0-9._%+-]+@@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/)) {
+                                isInputValid = false
+                                errMsg = "Email không hợp lệ"
+                            }
+                            break
+                        case "MinLength":
+                            if (val.length < minl) {
+                                isInputValid = false
+                                errMsg = "Phải nhập ít nhất " + minl + " ký tự"
+                            }
+                            break
+                        case "MaxLength":
+                            if (val.length > maxl) {
+                                isInputValid = false
+                                errMsg = "Không nhập quá " + maxl + " ký tự"
+                            }
+                            break
+                        case "Distinct":
+                            break
+                        case "Phone":
+                            if (!val.match(/\b0[0-9]{9}\b/)) {
+                                isInputValid = false
+                                errMsg = "Số điện thoại không hợp lệ"
+                            }
+                            break
+                        case "CCCD":
+                            if (!val.match(/\b0[0-9]{12}\b/)) {
+                                isInputValid = false
+                                errMsg = "Số điện thoại không hợp lệ"
+                            }
+                            break
+                    }
+                }
+
+                if (!isInputValid) {
+                    inputContainer.classList.add("err")
+                    if (inputContainer.querySelector(".err-msg") == null)
+                        inputContainer.appendChild(errElm)
+
+                    errElm.textContent = errMsg
+                }
+
+                isFormValid = isFormValid && isInputValid
+            }
+
+            return isFormValid
+        }
+
+        /// <reference path="jquery-3.7.0.min.js" />
+        $(document).ready(function () {
+            //Định nghĩa các biến và hàm
+            const pwdToggle = $('#toggle-pwd')
+            const editBtn = $('#edit-btn')
+            const cancelBtn = $('#cancel-btn')
+            const saveBtn = $('#save-btn')
+
+            const inputs = $('input')
+            const selectInput = $('select')
+
+            const mainForm = $('#edit-form')
+
+            const loader = $("#loading-container")
+
+            const successPopup = $("#successful-container")
+
+            let srcData = {};
+
+            // Định nghĩa hàm toggle ẩn hiện các elem
+            const toggleFunc = () => {
+                editBtn.toggleClass('visually-hidden')
+                cancelBtn.toggleClass('visually-hidden')
+                saveBtn.toggleClass('visually-hidden')
+
+                inputs.each(function (i, input) {
+                    if ($(input).attr('name') != 'UserID')
+                        $(input).prop('readonly', !$(input).prop('readonly'))
+                })
+
+                if (selectInput.css('pointer-events') == 'none')
+                    selectInput.css('pointer-events', 'unset')
+                else
+                    selectInput.css('pointer-events', 'none')
+            }       
+
+            const popupMsg = (msg) => {
+                let msgContainer = successPopup.find("span")
+                msgContainer.text(msg)
+
+                successPopup.toggleClass("visually-hidden")
+                setTimeout(() => successPopup.toggleClass("visually-hidden"), 2000)
+
+            }
+
+            const getInputData = () => {
+                srcData.inputData = {}
+
+                $.each(inputs, function (i, input) {
+                    if ($(input).attr("data-lock") == undefined)
+                        srcData.inputData[$(input).attr("name")] = $(input).val()
+                })
+
+                $.each(selectInput, function (i, input) {
+                    srcData.inputData[$(input).attr("name")] = $(input).val()
+                })
+                console.log(srcData)
+            }
+
+            const resetValue = () => {
+                $.each(srcData.inputData, function (key, value) {
+                    $(`[name=${key}]`).val(value)
+                })
+            }
+
+            //HANDLE EVENTS 
+            getInputData()
+
+            // Ẩn / hiện pwd
+            pwdToggle.click(() => {
+                pwdToggle.toggleClass('bxs-hide')
+                pwdToggle.toggleClass('bxs-show')
+
+                let pwdInput = $('input[name=Password]')
+                let pwdType = pwdInput.attr('type') == 'password' ? 'text' : 'password'
+                pwdInput.attr('type', pwdType)
+            })
+
+            // Khi nhấn nút edit
+            editBtn.click(function (e) {
+                toggleFunc()
+            })
+
+            // Khi nhấn nút huỷ
+            cancelBtn.click(function (e) {
+                clearAllErrState()
+                resetValue()
+                toggleFunc()
+            })
+
+            // Khi nhấn nút lưu
+            saveBtn.click(function (e) {
+                if (validate()) {
+                    // Gửi yêu cầu AJAX POST
+                    let myPromise = new Promise((resolve, reject) => {
+                        let formData = new FormData(mainForm[0])
+
+                        // Duyệt qua các trường trong form và lấy dữ liệu
+                        for (var [key, value] of formData.entries()) {
+                            console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                        }
+
+                        $.ajax({
+                            url: '/Admin/Customer/Edit', // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: formData,
+                            contentType: false,  // Đảm bảo không thay đổi content-type
+                            processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                            dataType: 'json',
+                            beforeSend: function () {
+                                loader.toggleClass("visually-hidden")
+                            },
+                            success: function (response) {
+                                loader.toggleClass("visually-hidden")
+                                resolve(response)
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((data) => {
+                        popupMsg("Bạn đã cập nhật thành công!")
+                        getInputData()
+                        toggleFunc()
+                    })
+                }
+            })
+
+        });
+    </script>
+}

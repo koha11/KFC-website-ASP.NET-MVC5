@@ -1,0 +1,231 @@
+﻿@*/User*@
+@model  QuanLyBanGaRan_64131011.Models.AppUser
+
+@{
+    ViewBag.Title = "AccountDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="py-4 container">
+    <div class="row flex-column flex-lg-row">
+        <div class="col-lg-4 rounded-5 px-5 col" style="background-color: #202124; height:fit-content" id="user-nav">
+            <div class="d-flex flex-lg-column justify-content-between align-items-center align-items-lg-baseline p-4">
+                <div>
+                    <img src="~/Images/logo1.png" class="rounded-circle" style="height: 120px; width: 120px" />
+                    <h3 class="text-white mt-2">Xin chào,<br> @Model.FullName</h3>
+                    <div class="pb-2">
+                        <a class="text-white fw-bolder" href="/logout">Đăng xuất</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User/Order">Đơn hàng đã đặt</a>
+                    </div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User">Chi tiết tài khoản</a>
+                    </div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User/ChangePassword">Thay đổi mật khẩu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 px-5 col mt-4 mt-lg-0">
+            <h3 class="text-uppercase">Chi tiết tài khoản</h3>
+            <form action="/User/EditAccount" method="post" id="edit-form">
+                <input type="hidden" name="UserID" value="@Model.UserID"/>
+                <div class="details-group">
+                    <label for="fullname">Họ và tên của bạn *</label>
+                    <input id="fullname" value="@Model.FullName" data-vtype="Required-NotNumber" name="FullName" class="px-3 py-1 mt-2 ms-1 rounded-3 w-100" style=" border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                </div>
+                <div class="details-group">
+                    <label for="Phone">Số điện thoại của bạn</label>
+                    <input id="Phone" value="@Model.Phone" data-vtype="Phone" name="Phone" class="px-3 py-1 mt-2 ms-1 rounded-3 w-100" style=" border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                </div>
+                <div class="details-group">
+                    <label for="Address">Địa chỉ nhà</label>
+                    <input id="Address" value="@Model.Address" data-vtype="" name="Address" class="px-3 py-1 mt-2 ms-1 rounded-3 w-100" style=" border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                </div>
+                <div class="details-group">
+                    <label for="Email">Địa chỉ email của bạn *</label>
+                    <input id="Email" value="@Model.Email" data-vtype="Required-Email" name="Email" class="px-3 py-1 mt-2 ms-1 rounded-3 w-100" ; style="border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                </div>
+                <div class="details-group mt-4">
+                    <button id="change-btn" type="submit" class="btn btn-outline-danger w-100 text-center">Cập nhật tài khoản</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        const form = document.querySelector("#edit-form")
+        const inputs = form.querySelectorAll("input[data-vtype]")
+
+        const clearErrState = (input) => {
+            let inputContainer = input.closest("div")
+            let errMsg = inputContainer.querySelector(".err-msg")
+            if (errMsg)
+                errMsg.remove()
+            inputContainer.classList.remove("err")
+        }
+
+        const clearAllErrState = () => {
+            for (let input of inputs) {
+                clearErrState(input)
+            }
+        }
+
+        // Lặp qua các input để bỏ trạng thái lỗi khi focus hoặc nhập vào input
+        for (let input of inputs) {
+            input.addEventListener("change", function (e) {
+                clearErrState(input)
+            })
+            input.addEventListener("focus", function (e) {
+                clearErrState(input)
+            })
+        }
+
+        const validate = () => {
+
+            let isFormValid = true
+
+            for (let input of inputs) {
+                let types = input.dataset.vtype.split("-")
+                let val = input.value
+                let isInputValid = true
+
+                let errElm = document.createElement("span")
+                errElm.classList.add("err-msg")
+                let inputContainer = input.closest("div")
+                let errMsg = ""
+
+                for (let type of types) {
+                    if (!isInputValid)
+                        break
+
+                    let maxl, minl
+
+                    if (type.includes("MinLength")) {
+                        minl = parseInt(type.split("_")[1])
+                        type = "MinLength"
+                    }
+
+                    if (type.includes("MaxLength")) {
+                        minl = parseInt(type.split("_")[1])
+                        type = "MaxLength"
+                    }
+
+                    switch (type) {
+                        case "Required":
+                            if (val == "") {
+                                isInputValid = false
+                                errMsg = "Trường này là bắt buộc"
+                            }
+                            break
+                        case "NotNumber":
+                            for (let c of val)
+                                if (!isNaN(c) && c != " ") {
+                                    isInputValid = false
+                                    errMsg = "Vui lòng không nhập số"
+                                    break;
+                                }
+                            break
+                        case "Mail":
+                            if (!val.match(/\b[A-Za-z0-9._%+-]+@@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/)) {
+                                isInputValid = false
+                                errMsg = "Email không hợp lệ"
+                            }
+                            break
+                        case "MinLength":
+                            if (val.length < minl) {
+                                isInputValid = false
+                                errMsg = "Phải nhập ít nhất " + minl + " ký tự"
+                            }
+                            break
+                        case "MaxLength":
+                            if (val.length > maxl) {
+                                isInputValid = false
+                                errMsg = "Không nhập quá " + maxl + " ký tự"
+                            }
+                            break
+                        case "Distinct":
+                            break
+                        case "Phone":
+                            if (!val.match(/\b0[0-9]{9}\b/)) {
+                                isInputValid = false
+                                errMsg = "Số điện thoại không hợp lệ"
+                            }
+                            break
+                        case "CCCD":
+                            if (!val.match(/\b0[0-9]{12}\b/)) {
+                                isInputValid = false
+                                errMsg = "Số điện thoại không hợp lệ"
+                            }
+                            break
+                    }
+                }
+
+                if (!isInputValid) {
+                    inputContainer.classList.add("err")
+                    if (inputContainer.querySelector(".err-msg") == null)
+                        inputContainer.appendChild(errElm)
+
+                    errElm.textContent = errMsg
+                }
+
+                isFormValid = isFormValid && isInputValid
+            }
+
+            return isFormValid
+        }
+
+        $(document).ready(function () {
+            const mainForm = $('#edit-form')
+
+            const loader = $("#loading-container")
+
+            const successPopup = $("#successful-container")
+
+            mainForm.on("submit", function (e) {
+                e.preventDefault()
+                if (validate()) {
+                    const formData = new FormData(mainForm[0])
+
+                    // Duyệt qua các trường trong form và lấy dữ liệu
+                    for (var [key, value] of formData.entries()) {
+                        console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                    }
+
+                    let myPromise = new Promise((resolve) => {
+                        $.ajax({
+                            url: `/User/EditAccount`, // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: formData,
+                            contentType: false,  // Đảm bảo không thay đổi content-type
+                            processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                            dataType: 'json',
+                            beforeSend: function () {
+                                loader.toggleClass("visually-hidden")
+                            },
+                            success: function (response) {
+                                loader.toggleClass("visually-hidden")
+                                console.log(response)
+                                resolve(response)
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((data) => {
+                        successPopup.toggleClass("visually-hidden")
+                        setTimeout(() => successPopup.toggleClass("visually-hidden"), 2000)
+                    })
+                }
+            }) 
+        })
+    </script>
+} 

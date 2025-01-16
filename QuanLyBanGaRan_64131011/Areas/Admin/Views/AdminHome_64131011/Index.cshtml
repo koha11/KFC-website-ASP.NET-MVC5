@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@*Khu vực thống kê*@
+<div class="body-content p-0 d-flex justify-content-between container">
+
+    @*SL KH*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Số ĐH hôm nay</span>
+            <b>@ViewBag.OrderAmount</b>
+        </div>
+        <div>
+            <i class='bx bx-notepad fs-1'></i>
+        </div>
+    </div>
+
+    @*ĐH CHƯA HOÀN THÀNH*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Số ĐH đang chờ duyệt</span>
+            <b>@ViewBag.AcceptOrderAmount</b>
+        </div>
+        <div>
+            <i class='bx bx-notepad fs-1 text-warning'></i>
+        </div>
+    </div>
+
+    @*ĐH ĐÃ HOÀN THÀNH*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Số ĐH đang chờ giao</span>
+            <b>@ViewBag.ShipOrderAmount</b>
+        </div>
+        <div>
+            <i class='bx bx-notepad fs-1 text-danger'></i>
+        </div>
+    </div>
+
+    @*TỔNG TIỀN*@
+    <div class="bg-white d-flex justify-content-around p-4 rounded" style="width:22%">
+        <div class="d-flex flex-column flex-fill">
+            <span>Tổng tiền hôm nay</span>
+            <b>@ViewBag.OrderTotals.ToString("N0") VNĐ</b>            
+        </div>
+        <div>
+            <i class='bx bx-coin fs-1 text-warning'></i>
+        </div>
+    </div>
+</div>
+
+<div class="body-content bg-white p-4 mt-5 container rounded">
+    <div class="chart-container">
+        <canvas id="dailyRevenueChart"></canvas>
+    </div>
+</div>
+
+<div class="body-content bg-white p-4 mt-5 container rounded">
+    <div class="chart-container">
+        <canvas id="monthlyRevenueChart"></canvas>
+    </div>
+</div>
+
+<div class="body-content bg-white p-4 mt-5 container rounded">
+    <div class="chart-container">
+        <canvas id="yearlyRevenueChart"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const loader = document.querySelector("#loading-container")
+        // Sample data for demonstration
+        const getData = () => {
+            return new Promise(resolve => {
+                // Tạo request
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/Admin/GetStatisticsData', true);
+                loader.classList.remove("visually-hidden")
+
+                // Khi request hoàn thành
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        console.log(JSON.parse(xhr.responseText));
+                        loader.classList.add("visually-hidden")
+                        resolve(JSON.parse(xhr.responseText))
+                    } else {
+                        console.error('Lỗi xảy ra:', xhr.status);
+                    }
+                };
+
+                // Gửi request
+                xhr.send();          
+            })
+        }
+
+        getData().then(res => {
+
+            const dailyData = {
+                labels: res.daily.dailyDay, // Days of the week
+                datasets: [{
+                    label: "Doanh thu hàng ngày của tháng 1",
+                    data: res.daily.dailyTotals,
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1
+                }]
+            };
+
+            const monthlyData = {
+                labels: res.monthly.dailyMonth,
+                datasets: [{
+                    label: "Doanh thu hàng tháng năm 2025",
+                    data: res.monthly.monthlyTotals,
+                    backgroundColor: "rgba(153, 102, 255, 0.2)",
+                    borderColor: "rgba(153, 102, 255, 1)",
+                    borderWidth: 1
+                }]
+            };
+
+            const yearlyData = {
+                labels: res.yearly.dailyYear,
+                datasets: [{
+                    label: "Doanh thu hàng năm",
+                    data: res.yearly.yearlyTotals,
+                    backgroundColor: "rgba(255, 159, 64, 0.2)",
+                    borderColor: "rgba(255, 159, 64, 1)",
+                    borderWidth: 1
+                }]
+            };
+
+            // Create charts
+            const dailyRevenueCtx = document.getElementById('dailyRevenueChart').getContext('2d');
+            new Chart(dailyRevenueCtx, {
+                type: 'bar',
+                data: dailyData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Thống kê doanh thu hàng ngày'
+                        }
+                    }
+                }
+            });
+
+            const monthlyRevenueCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+            new Chart(monthlyRevenueCtx, {
+                type: 'line',
+                data: monthlyData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Thống kê doanh thu hàng tháng'
+                        }
+                    }
+                }
+            });
+
+            const yearlyRevenueCtx = document.getElementById('yearlyRevenueChart').getContext('2d');
+            new Chart(yearlyRevenueCtx, {
+                type: 'pie',
+                data: yearlyData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Thống kê doanh thu hàng năm'
+                        }
+                    }
+                }
+            });
+        })
+
+        
+    </script>
+}
+
+@section Link {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+}

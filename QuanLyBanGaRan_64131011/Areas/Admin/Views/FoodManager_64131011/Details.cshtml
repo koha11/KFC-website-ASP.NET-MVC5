@@ -1,0 +1,357 @@
+﻿@*/Admin/Food/Details/{id}*@
+
+@model QuanLyBanGaRan_64131011.Models.Food
+@{
+    ViewBag.Title = "Details";
+    var id = Request.RequestContext.RouteData.Values["id"];
+    var user = (QuanLyBanGaRan_64131011.Models.AppUser)HttpContext.Current.Session["user"];
+    var uName = user.FullName;
+    var roleID = user.RoleID;
+}
+
+<div class="body-content bg-white p-4 container rounded">
+
+    <section class="d-flex justify-content-between py-2 mb-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @if (id != null)
+                {
+                    <li class="breadcrumb-item"><a href="../">@ViewBag.header</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@id</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.header</li>
+                }
+            </ol>
+        </nav>
+    </section>
+
+    <section class="d-flex flex-column">
+        <form class="row flex-column flex-lg-row" enctype="multipart/form-data" id="edit-form">
+
+            <div class="d-flex justify-content-start align-items-center px-2 flex-column col col-lg-2">
+                <img src="~/Images/@Model.FoodImage" class="w-75 rounded-circle" style="height:fit-content" id="avt-img" />
+                <div class="p-2 mt-4 avt-input-container visually-hidden">
+                    <input name="FoodImage" type="file" class="visually-hidden" accept="image/*" id="avatar">
+                    <label for="avatar" style="cursor:pointer" class="btn-outline-dark btn">
+                        Thay đổi ảnh món
+                        <i class='bx bx-edit'></i>
+                    </label>
+                </div>
+            </div>
+
+            <div class="px-2 col col-lg-10 row row-cols-lg-2 row-cols-1">
+                <div class="d-flex flex-column details-group col">
+                    <label for="foodid">Mã món</label>
+                    <input value="@Model.FoodID" id="foodid" data-vtype="Required" name="FoodID" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="FoodName">Tên món</label>
+                    <input value="@Model.FoodName" id="FoodName" data-vtype="Required" name="FoodName" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="fdct">Loại món</label>
+                    @Html.DropDownList("FoodCategoryID", null, htmlAttributes: new { @id = "fdct", @class = "px-3 py-1 mt-2 ms-1 rounded-3", @style = "width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid; pointer-events: none;" })
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="FoodPrice">Giá gốc</label>
+                    <input value="@Model.FoodPrice" type="number" data-vtype="Required" id="FoodPrice" name="FoodPrice" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="FoodUnits">Đơn vị tính</label>
+                    <input value="@Model.FoodUnits" id="FoodUnits" data-vtype="Required" name="FoodUnits" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+                <div class="d-flex flex-column details-group col">
+                    <label for="FoodDetails">Mô tả về món</label>
+                    <input value="@Model.FoodDetails" id="FoodDetails" name="FoodDetails" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" readonly />
+                </div>
+            </div>
+        </form>
+
+        @if (roleID == "ADMIN")
+        {
+            <div class="d-flex justify-content-end py-2 mt-4">
+                <button type="button" class="btn btn-outline-secondary mx-2 visually-hidden" id="cancel-btn">
+                    Huỷ bỏ
+                    <i class='bx bx-x'></i>
+                </button>
+
+                <button type="button" class="btn btn-outline-success mx-2 visually-hidden" id="save-btn">
+                    Lưu lại
+                    <i class='bx bx-check'></i>
+                </button>
+
+                <button type="button" class="btn btn-outline-primary mx-2" id="edit-btn">
+                    Chỉnh sửa
+                    <i class='bx bx-edit-alt'></i>
+                </button>
+            </div>
+        }
+
+    </section>
+
+</div>
+
+@section Scripts {
+    <script>
+        const form = document.querySelector("#edit-form")
+        const inputs = form.querySelectorAll("input[data-vtype]")
+
+        const clearErrState = (input) => {
+            let inputContainer = input.closest("div")
+            let errMsg = inputContainer.querySelector(".err-msg")
+            if (errMsg)
+                errMsg.remove()
+            inputContainer.classList.remove("err")
+        }
+
+        const clearAllErrState = () => {
+            for (let input of inputs) {
+                clearErrState(input)
+            }
+        }
+
+        // Lặp qua các input để bỏ trạng thái lỗi khi focus hoặc nhập vào input
+        for (let input of inputs) {
+            input.addEventListener("change", function (e) {
+                clearErrState(input)
+            })
+            input.addEventListener("focus", function (e) {
+                clearErrState(input)
+            })
+        }
+
+        const validate = () => {
+
+            let isFormValid = true
+
+            for (let input of inputs) {
+                let types = input.dataset.vtype.split("-")
+                let val = input.value
+                let isInputValid = true
+
+                let errElm = document.createElement("span")
+                errElm.classList.add("err-msg")
+                let inputContainer = input.closest("div")
+                let errMsg = ""
+
+                for (let type of types) {
+                    if (!isInputValid)
+                        break
+
+                    let maxl, minl
+
+                    if (type.includes("MinLength")) {
+                        minl = parseInt(type.split("_")[1])
+                        type = "MinLength"
+                    }
+
+                    if (type.includes("MaxLength")) {
+                        minl = parseInt(type.split("_")[1])
+                        type = "MaxLength"
+                    }
+
+                    switch (type) {
+                        case "Required":
+                            if (val == "") {
+                                isInputValid = false
+                                errMsg = "Trường này là bắt buộc"
+                            }
+                            break
+                        case "NotNumber":
+                            for (let c of val)
+                                if (!isNaN(c) && c != " ") {
+                                    console.log(isNaN(c))
+                                    console.log(c)
+                                    isInputValid = false
+                                    errMsg = "Vui lòng không nhập số"
+                                    break;
+                                }
+                            break
+                        case "Mail":
+                            if (!val.match(/\b[A-Za-z0-9._%+-]+@@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/)) {
+                                isInputValid = false
+                                errMsg = "Email không hợp lệ"
+                            }
+                            break
+                        case "MinLength":
+                            if (val.length < minl) {
+                                isInputValid = false
+                                errMsg = "Phải nhập ít nhất " + minl + " ký tự"
+                            }
+                            break
+                        case "MaxLength":
+                            if (val.length > maxl) {
+                                isInputValid = false
+                                errMsg = "Không nhập quá " + maxl + " ký tự"
+                            }
+                            break
+                        case "Distinct":
+                            break
+                        case "Phone":
+                            if (!val.match(/\b0[0-9]{9}\b/)) {
+                                isInputValid = false
+                                errMsg = "Số điện thoại không hợp lệ"
+                            }
+                            break
+                        case "CCCD":
+                            if (!val.match(/\b0[0-9]{12}\b/)) {
+                                isInputValid = false
+                                errMsg = "Số điện thoại không hợp lệ"
+                            }
+                            break
+                    }
+                }
+
+                if (!isInputValid) {
+                    inputContainer.classList.add("err")
+                    if (inputContainer.querySelector(".err-msg") == null)
+                        inputContainer.appendChild(errElm)
+
+                    errElm.textContent = errMsg
+                }
+
+                isFormValid = isFormValid && isInputValid
+            }
+
+            return isFormValid
+        }
+
+        /// <reference path="jquery-3.7.0.min.js" />
+        $(document).ready(function () {
+            //Định nghĩa các biến và hàm
+            const editBtn = $('#edit-btn')
+            const cancelBtn = $('#cancel-btn')
+            const saveBtn = $('#save-btn')
+
+            const inputs = $('input')
+            const selectInput = $('select')
+            const avtInpContainer = $('.avt-input-container')
+            const avtInp = $('input[name=FoodImage]')
+            const imgElem = $('#avt-img')
+            const mainForm = $('#edit-form')
+            const loader = $("#loading-container")
+            const successPopup = $("#successful-container")
+
+            let prevImgSrc = "@Model.FoodImage";
+            let srcData = {}
+
+            // Định nghĩa hàm toggle ẩn hiện các elem
+            const toggleFunc = () => {
+                editBtn.toggleClass('visually-hidden')
+                cancelBtn.toggleClass('visually-hidden')
+                saveBtn.toggleClass('visually-hidden')
+                avtInpContainer.toggleClass('visually-hidden')
+
+                inputs.each(function (i, input) {
+                    if ($(input).attr('name') != 'FoodID')
+                        $(input).prop('readonly', !$(input).prop('readonly'))
+                })
+
+                if (selectInput.css('pointer-events') == 'none')
+                    selectInput.css('pointer-events', 'unset')
+                else
+                    selectInput.css('pointer-events', 'none')
+            }        
+
+            const popupMsg = (msg) => {
+                let msgContainer = successPopup.find("span")
+                msgContainer.text(msg)
+
+                successPopup.toggleClass("visually-hidden")
+                setTimeout(() => successPopup.toggleClass("visually-hidden"), 2000)
+
+            }
+
+            const resetValue = () => {
+                $.each(srcData.inputData, function (key, value) {
+                    $(`[name=${key}]`).val(value)
+                })
+            }
+
+            const getInputData = () => {
+                srcData.inputData = {}
+
+                $.each(inputs, function (i, input) {
+                    if ($(input).attr("data-lock") == undefined)
+                        srcData.inputData[$(input).attr("name")] = $(input).val()
+                })
+
+                $.each(selectInput, function (i, input) {
+                    srcData.inputData[$(input).attr("name")] = $(input).val()
+                })
+                console.log(srcData)
+            }
+
+            //HANDLE EVENTS
+            getInputData()
+
+            // Khi nhấn nút edit
+            editBtn.click(function () {
+                toggleFunc()
+                // Xử lý preview ảnh
+                avtInp.on('change', (e) => {
+                    console.log(e.target)
+                    const file = e.target.files[0];
+                    imgElem.attr('src', URL.createObjectURL(file))
+                })
+            })
+
+            // Khi nhấn nút huỷ
+            cancelBtn.click(function (e) {
+                avtInp.val(null)
+                imgElem.attr('src', "/Images/" + prevImgSrc)
+                clearAllErrState()
+                resetValue()
+                toggleFunc()
+            })
+
+            // Khi nhấn nút lưu
+            saveBtn.click(function (e) {
+                if (validate()) {
+                    // Gửi yêu cầu AJAX POST
+                    let myPromise = new Promise((resolve, reject) => {
+                        let formData = new FormData(mainForm[0])
+
+                        //Nếu người dùng không nhập avt -> lấy avt cũ
+                        if (avtInp.val() == '') {
+                            formData.append('prevImg', imgElem.attr('src').substring(8))
+                        }
+
+                        // Duyệt qua các trường trong form và lấy dữ liệu
+                        for (var [key, value] of formData.entries()) {
+                            console.log(key + ": " + value); // Hiển thị key và value của từng trường trong form
+                        }
+
+                        $.ajax({
+                            url: '/Admin/Food/Edit', // URL đến controller action
+                            type: 'POST', // Phương thức HTTP
+                            data: formData,
+                            contentType: false,  // Đảm bảo không thay đổi content-type
+                            processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                            dataType: 'json',
+                            beforeSend: function () {
+                                loader.toggleClass("visually-hidden")
+                            },
+                            success: function (response) {
+                                resolve(response)
+                                loader.toggleClass("visually-hidden")
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Có lỗi xảy ra: ' + error)
+                            }
+                        });
+                    })
+
+                    myPromise.then((data) => {
+                        popupMsg("Bạn đã cập nhật thành công!")
+                        getInputData()
+                        toggleFunc()
+                    })
+                }
+            })
+
+        });
+    </script>
+}

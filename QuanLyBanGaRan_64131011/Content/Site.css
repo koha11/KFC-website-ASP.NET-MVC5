@@ -1,0 +1,266 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+/*    margin-top: 15px;*/
+/*    padding-left: 15px;
+    padding-right: 15px;*/
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+:root {
+    --main-color: #e4002b;
+}
+
+.nav-link:hover{
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.form-msg {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+.form-label{
+    
+}
+
+#sidebar
+{
+
+}
+
+    #sidebar .sidebar-toggle:hover
+    {
+        cursor: pointer;
+        background-color: rgba(1,1,1,0.3);
+        opacity: .8;
+    }
+
+
+    #sidebar .active {
+        border-left: var(--main-color) 8px solid;
+        cursor: unset;
+        background-color: rgba(1, 1, 1, 0.05);
+    }
+
+.tfoot-style{
+    text-align:center;
+}
+
+.tfoot-style a{
+    text-decoration: none;
+    padding: 2px 8px;
+    color: darkblue;
+    box-shadow: 0 0 4px 0 black;
+    font-weight: 500;
+}
+
+.tfoot-style a:hover{
+    opacity: .6;
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+.details-group{
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.err input {
+    border-color: red !important;
+}
+
+.err label {
+    color: red !important;
+}
+
+.err .err-msg {
+    display: block;
+    position: absolute;
+    bottom: -30px;
+    color: red;
+    left: 20px;
+}
+
+.input-msg {
+    font-size: 0.75rem;
+    color: #717171;
+    margin-left: 10px;
+    padding-top: 0.25rem;
+}
+
+.loading {
+    animation: spin 2s linear infinite; /* Animation xoay */
+    font-size: 4rem !important;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#category-menu .card:hover {
+    cursor: pointer;
+    animation: scale 1s linear forwards; /* Animation xoay */
+}
+
+#category-scrollpy .card:hover {
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, .4);
+}
+
+#category-scrollpy .add-btn {
+    transition: background-color linear .5s;
+}
+
+#category-scrollpy .add-btn:hover {
+    background-color: white !important;
+    color: var(--main-color) !important;
+    border: 1px var(--main-color) solid;
+}
+
+@keyframes scale {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
+}
+
+#food-category-navbar .nav-link {
+    text-decoration: none;
+    color: rgba(0, 0, 0, .5);
+    transition: color ease 1s;
+}
+
+#food-category-navbar .nav-link:hover {
+    color: rgba(0, 0, 0, 1);
+    background: unset;
+}
+
+    #food-category-navbar .nav-link.active {
+        color: rgba(0, 0, 0, 1);
+    }
+
+        #food-category-navbar .nav-link.active::after {
+            width: 100%;
+            height: 2px;
+            background-color: var(--main-color);
+            content: "";
+            display: block;
+        }
+
+/*CSS của thư viện paginationjs*/
+#user-oder-list-container {
+
+}
+
+#user-oder-list-container .row{
+    padding: 0.5rem 0;
+    border-bottom: solid 1px rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content:center
+}
+
+.paginationjs {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.paginationjs-pages li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.paginationjs-pages .active {
+    font-weight: bold;
+    color: white;
+    background: #007bff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/*CSS của thư viện Swiper (thư viện cung cấp gallery)*/
+.swiper {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    text-wrap-mode: nowarp;
+}
+
+.noUi-base
+{
+    width: 90%
+}
+/* Tùy chỉnh nền thanh trượt */
+.noUi-target {
+    background: #f0f0f0; /* Màu nền */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Tùy chỉnh phần "connect" (đã chọn giữa 2 thumb) */
+.noUi-connect {    
+    background: linear-gradient(to right, var(--main-color), var(--main-color)); /* Gradient xanh dương */
+}
+
+/* Tùy chỉnh thumb (nút điều khiển) */
+.noUi-handle {
+    width: 18px !important;
+    height: 18px !important;
+    border: 1px solid #F5F6FA;
+    border-radius: 50%; /* Hình tròn */
+    background: #ccc;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    cursor: pointer;    
+}
+
+    /* Hover và focus cho thumb */
+    .noUi-handle:hover,
+    .noUi-handle:focus {
+        background: #F5F6FA;
+        border-color: #0056b3;
+        outline: none;
+    }
+
+    .noUi-handle:after, .noUi-handle:before{
+        display: none
+    }
+
+/* Tooltip hiển thị giá trị (nếu cần) */
+.noUi-tooltip {
+    background: #333;
+    color: #fff;
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 12px;
+}
+
+/*RESPONSIVE*/

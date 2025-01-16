@@ -1,0 +1,719 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="QuanLyBanGaRan_64131011Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="256" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="256" />
+          <Property Name="Phone" Type="char" MaxLength="10" />
+          <Property Name="CCCD" Type="char" MaxLength="12" />
+          <Property Name="Avatar" Type="nvarchar" MaxLength="256" />
+          <Property Name="Username" Type="varchar" MaxLength="30" />
+          <Property Name="Password" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="RoleID" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="IsActived" Type="bit" />
+        </EntityType>
+        <EntityType Name="CustomerOrder">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="ShipmentDate" Type="datetime" />
+          <Property Name="FinishDate" Type="datetime" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="OrderedBy" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="AcceptedBy" Type="varchar" MaxLength="8" />
+          <Property Name="ShippedBy" Type="varchar" MaxLength="8" />
+          <Property Name="TotalPrice" Type="money" />
+          <Property Name="AcceptDate" Type="datetime" />
+          <Property Name="VoucherID" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="FoodID" />
+          </Key>
+          <Property Name="FoodID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="FoodName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="FoodDetails" Type="nvarchar" MaxLength="256" />
+          <Property Name="FoodPrice" Type="money" Nullable="false" />
+          <Property Name="FoodUnits" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="FoodImage" Type="nvarchar" MaxLength="256" />
+          <Property Name="FoodCategoryID" Type="char" MaxLength="8" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FoodCategory">
+          <Key>
+            <PropertyRef Name="FoodCategoryID" />
+          </Key>
+          <Property Name="FoodCategoryID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="FoodCategoryName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FoodPromotion">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+            <PropertyRef Name="FoodID" />
+            <PropertyRef Name="DateStart" />
+          </Key>
+          <Property Name="PromotionID" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="FoodID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="DateStart" Type="date" Nullable="false" />
+          <Property Name="DateEnd" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="FoodID" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="FoodID" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="Amount" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Promotion">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+          </Key>
+          <Property Name="PromotionID" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="PromotionName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="PromotionDetails" Type="nvarchar" MaxLength="256" />
+          <Property Name="Discount" Type="decimal" Precision="3" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Voucher">
+          <Key>
+            <PropertyRef Name="VoucherID" />
+          </Key>
+          <Property Name="VoucherID" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Condition" Type="money" />
+          <Property Name="Discount" Type="money" Nullable="false" />
+          <Property Name="OfferDetails" Type="nvarchar" MaxLength="256" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <Association Name="FK__AppUser__RoleID__08B54D69">
+          <End Role="AppRole" Type="Self.AppRole" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppRole">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="AppUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CustomerO__Accep__40F9A68C">
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="0..1" />
+          <End Role="CustomerOrder" Type="Self.CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="AcceptedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CustomerO__Order__40058253">
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="1" />
+          <End Role="CustomerOrder" Type="Self.CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="OrderedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CustomerO__Shipp__41EDCAC5">
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="0..1" />
+          <End Role="CustomerOrder" Type="Self.CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="ShippedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Food__FoodCatego__17F790F9">
+          <End Role="FoodCategory" Type="Self.FoodCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Food" Type="Self.Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FoodCategory">
+              <PropertyRef Name="FoodCategoryID" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="FoodCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodPromo__FoodI__30C33EC3">
+          <End Role="Food" Type="Self.Food" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FoodPromotion" Type="Self.FoodPromotion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodID" />
+            </Principal>
+            <Dependent Role="FoodPromotion">
+              <PropertyRef Name="FoodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodPromo__Promo__2FCF1A8A">
+          <End Role="Promotion" Type="Self.Promotion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FoodPromotion" Type="Self.FoodPromotion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Promotion">
+              <PropertyRef Name="PromotionID" />
+            </Principal>
+            <Dependent Role="FoodPromotion">
+              <PropertyRef Name="PromotionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__FoodI__45BE5BA9">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodID" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="FoodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Order__44CA3770">
+          <End Role="CustomerOrder" Type="Self.CustomerOrder" Multiplicity="1" />
+          <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerOrder">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Voucher">
+          <End Role="Voucher" Type="Self.Voucher" Multiplicity="0..1" />
+          <End Role="CustomerOrder" Type="Self.CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Voucher">
+              <PropertyRef Name="VoucherID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="VoucherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QuanLyBanGaRan_64131011ModelStoreContainer">
+          <EntitySet Name="AppRole" EntityType="Self.AppRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerOrder" EntityType="Self.CustomerOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FoodCategory" EntityType="Self.FoodCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FoodPromotion" EntityType="Self.FoodPromotion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Promotion" EntityType="Self.Promotion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Voucher" EntityType="Self.Voucher" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AppUser__RoleID__08B54D69" Association="Self.FK__AppUser__RoleID__08B54D69">
+            <End Role="AppRole" EntitySet="AppRole" />
+            <End Role="AppUser" EntitySet="AppUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CustomerO__Accep__40F9A68C" Association="Self.FK__CustomerO__Accep__40F9A68C">
+            <End Role="AppUser" EntitySet="AppUser" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CustomerO__Order__40058253" Association="Self.FK__CustomerO__Order__40058253">
+            <End Role="AppUser" EntitySet="AppUser" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CustomerO__Shipp__41EDCAC5" Association="Self.FK__CustomerO__Shipp__41EDCAC5">
+            <End Role="AppUser" EntitySet="AppUser" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Food__FoodCatego__17F790F9" Association="Self.FK__Food__FoodCatego__17F790F9">
+            <End Role="FoodCategory" EntitySet="FoodCategory" />
+            <End Role="Food" EntitySet="Food" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodPromo__FoodI__30C33EC3" Association="Self.FK__FoodPromo__FoodI__30C33EC3">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="FoodPromotion" EntitySet="FoodPromotion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodPromo__Promo__2FCF1A8A" Association="Self.FK__FoodPromo__Promo__2FCF1A8A">
+            <End Role="Promotion" EntitySet="Promotion" />
+            <End Role="FoodPromotion" EntitySet="FoodPromotion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__FoodI__45BE5BA9" Association="Self.FK__OrderDeta__FoodI__45BE5BA9">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Order__44CA3770" Association="Self.FK__OrderDeta__Order__44CA3770">
+            <End Role="CustomerOrder" EntitySet="CustomerOrder" />
+            <End Role="OrderDetail" EntitySet="OrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Voucher" Association="Self.FK_Order_Voucher">
+            <End Role="Voucher" EntitySet="Voucher" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrder" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QuanLyBanGaRan_64131011Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AppRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RoleName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AppUsers" Relationship="Self.FK__AppUser__RoleID__7C4F7684" FromRole="AppRole" ToRole="AppUser" />
+        </EntityType>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="CCCD" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleID" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AppRole" Relationship="Self.FK__AppUser__RoleID__7C4F7684" FromRole="AppUser" ToRole="AppRole" />
+          <Property Name="Avatar" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CustomerOrders" Relationship="QuanLyBanGaRan_64131011Model.FK__CustomerO__Accep__40F9A68C" FromRole="AppUser" ToRole="CustomerOrder" />
+          <NavigationProperty Name="CustomerOrders1" Relationship="QuanLyBanGaRan_64131011Model.FK__CustomerO__Order__40058253" FromRole="AppUser" ToRole="CustomerOrder" />
+          <NavigationProperty Name="CustomerOrders2" Relationship="QuanLyBanGaRan_64131011Model.FK__CustomerO__Shipp__41EDCAC5" FromRole="AppUser" ToRole="CustomerOrder" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="IsActived" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK__AppUser__RoleID__7C4F7684">
+          <End Role="AppRole" Type="Self.AppRole" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppRole">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="AppUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QuanLyBanGaRan_64131011Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AppRoles" EntityType="Self.AppRole" />
+          <EntitySet Name="AppUsers" EntityType="Self.AppUser" />
+          <AssociationSet Name="FK__AppUser__RoleID__7C4F7684" Association="Self.FK__AppUser__RoleID__7C4F7684">
+            <End Role="AppRole" EntitySet="AppRoles" />
+            <End Role="AppUser" EntitySet="AppUsers" />
+          </AssociationSet>
+          <EntitySet Name="Foods" EntityType="QuanLyBanGaRan_64131011Model.Food" />
+          <EntitySet Name="FoodCategories" EntityType="QuanLyBanGaRan_64131011Model.FoodCategory" />
+          <AssociationSet Name="FK__Food__FoodCatego__17F790F9" Association="QuanLyBanGaRan_64131011Model.FK__Food__FoodCatego__17F790F9">
+            <End Role="FoodCategory" EntitySet="FoodCategories" />
+            <End Role="Food" EntitySet="Foods" />
+          </AssociationSet>
+          <EntitySet Name="FoodPromotions" EntityType="QuanLyBanGaRan_64131011Model.FoodPromotion" />
+          <EntitySet Name="Promotions" EntityType="QuanLyBanGaRan_64131011Model.Promotion" />
+          <AssociationSet Name="FK__FoodPromo__FoodI__30C33EC3" Association="QuanLyBanGaRan_64131011Model.FK__FoodPromo__FoodI__30C33EC3">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="FoodPromotion" EntitySet="FoodPromotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodPromo__Promo__2FCF1A8A" Association="QuanLyBanGaRan_64131011Model.FK__FoodPromo__Promo__2FCF1A8A">
+            <End Role="Promotion" EntitySet="Promotions" />
+            <End Role="FoodPromotion" EntitySet="FoodPromotions" />
+          </AssociationSet>
+          <EntitySet Name="CustomerOrders" EntityType="QuanLyBanGaRan_64131011Model.CustomerOrder" />
+          <EntitySet Name="OrderDetails" EntityType="QuanLyBanGaRan_64131011Model.OrderDetail" />
+          <EntitySet Name="Vouchers" EntityType="QuanLyBanGaRan_64131011Model.Voucher" />
+          <AssociationSet Name="FK__CustomerO__Accep__40F9A68C" Association="QuanLyBanGaRan_64131011Model.FK__CustomerO__Accep__40F9A68C">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CustomerO__Order__40058253" Association="QuanLyBanGaRan_64131011Model.FK__CustomerO__Order__40058253">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CustomerO__Shipp__41EDCAC5" Association="QuanLyBanGaRan_64131011Model.FK__CustomerO__Shipp__41EDCAC5">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Order__44CA3770" Association="QuanLyBanGaRan_64131011Model.FK__OrderDeta__Order__44CA3770">
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__FoodI__45BE5BA9" Association="QuanLyBanGaRan_64131011Model.FK__OrderDeta__FoodI__45BE5BA9">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Voucher" Association="QuanLyBanGaRan_64131011Model.FK_Order_Voucher">
+            <End Role="Voucher" EntitySet="Vouchers" />
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="FoodID" />
+          </Key>
+          <Property Name="FoodID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="FoodName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="FoodDetails" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="FoodPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="FoodUnits" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="FoodImage" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="FoodCategoryID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="FoodCategory" Relationship="QuanLyBanGaRan_64131011Model.FK__Food__FoodCatego__17F790F9" FromRole="Food" ToRole="FoodCategory" />
+          <NavigationProperty Name="FoodPromotions" Relationship="QuanLyBanGaRan_64131011Model.FK__FoodPromo__FoodI__30C33EC3" FromRole="Food" ToRole="FoodPromotion" />
+          <NavigationProperty Name="OrderDetails" Relationship="QuanLyBanGaRan_64131011Model.FK__OrderDeta__FoodI__45BE5BA9" FromRole="Food" ToRole="OrderDetail" />
+        </EntityType>
+        <EntityType Name="FoodCategory">
+          <Key>
+            <PropertyRef Name="FoodCategoryID" />
+          </Key>
+          <Property Name="FoodCategoryID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="FoodCategoryName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Foods" Relationship="QuanLyBanGaRan_64131011Model.FK__Food__FoodCatego__17F790F9" FromRole="FoodCategory" ToRole="Food" />
+        </EntityType>
+        <Association Name="FK__Food__FoodCatego__17F790F9">
+          <End Type="QuanLyBanGaRan_64131011Model.FoodCategory" Role="FoodCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLyBanGaRan_64131011Model.Food" Role="Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FoodCategory">
+              <PropertyRef Name="FoodCategoryID" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="FoodCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FoodPromotion">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+            <PropertyRef Name="FoodID" />
+            <PropertyRef Name="DateStart" />
+          </Key>
+          <Property Name="PromotionID" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="FoodID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Food" Relationship="QuanLyBanGaRan_64131011Model.FK__FoodPromo__FoodI__30C33EC3" FromRole="FoodPromotion" ToRole="Food" />
+          <NavigationProperty Name="Promotion" Relationship="QuanLyBanGaRan_64131011Model.FK__FoodPromo__Promo__2FCF1A8A" FromRole="FoodPromotion" ToRole="Promotion" />
+        </EntityType>
+        <EntityType Name="Promotion">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+          </Key>
+          <Property Name="PromotionID" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="PromotionName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="PromotionDetails" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Discount" Type="Decimal" Nullable="false" Precision="3" Scale="2" />
+          <NavigationProperty Name="FoodPromotions" Relationship="QuanLyBanGaRan_64131011Model.FK__FoodPromo__Promo__2FCF1A8A" FromRole="Promotion" ToRole="FoodPromotion" />
+        </EntityType>
+        <Association Name="FK__FoodPromo__FoodI__30C33EC3">
+          <End Type="QuanLyBanGaRan_64131011Model.Food" Role="Food" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLyBanGaRan_64131011Model.FoodPromotion" Role="FoodPromotion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodID" />
+            </Principal>
+            <Dependent Role="FoodPromotion">
+              <PropertyRef Name="FoodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodPromo__Promo__2FCF1A8A">
+          <End Type="QuanLyBanGaRan_64131011Model.Promotion" Role="Promotion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLyBanGaRan_64131011Model.FoodPromotion" Role="FoodPromotion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Promotion">
+              <PropertyRef Name="PromotionID" />
+            </Principal>
+            <Dependent Role="FoodPromotion">
+              <PropertyRef Name="PromotionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CustomerOrder">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="ShipmentDate" Type="DateTime" Precision="3" />
+          <Property Name="FinishDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="OrderedBy" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="AcceptedBy" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="ShippedBy" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="AppUser" Relationship="QuanLyBanGaRan_64131011Model.FK__CustomerO__Accep__40F9A68C" FromRole="CustomerOrder" ToRole="AppUser" />
+          <NavigationProperty Name="AppUser1" Relationship="QuanLyBanGaRan_64131011Model.FK__CustomerO__Order__40058253" FromRole="CustomerOrder" ToRole="AppUser" />
+          <NavigationProperty Name="AppUser2" Relationship="QuanLyBanGaRan_64131011Model.FK__CustomerO__Shipp__41EDCAC5" FromRole="CustomerOrder" ToRole="AppUser" />
+          <NavigationProperty Name="OrderDetails" Relationship="QuanLyBanGaRan_64131011Model.FK__OrderDeta__Order__44CA3770" FromRole="CustomerOrder" ToRole="OrderDetail" />
+          <Property Name="AcceptDate" Type="DateTime" Precision="3" />
+          <Property Name="VoucherID" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Voucher" Relationship="QuanLyBanGaRan_64131011Model.FK_Order_Voucher" FromRole="CustomerOrder" ToRole="Voucher" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="FoodID" />
+          </Key>
+          <Property Name="OrderID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="FoodID" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="Amount" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="CustomerOrder" Relationship="QuanLyBanGaRan_64131011Model.FK__OrderDeta__Order__44CA3770" FromRole="OrderDetail" ToRole="CustomerOrder" />
+          <NavigationProperty Name="Food" Relationship="QuanLyBanGaRan_64131011Model.FK__OrderDeta__FoodI__45BE5BA9" FromRole="OrderDetail" ToRole="Food" />
+        </EntityType>
+        <EntityType Name="Voucher">
+          <Key>
+            <PropertyRef Name="VoucherID" />
+          </Key>
+          <Property Name="VoucherID" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Condition" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Discount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="OfferDetails" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="CustomerOrders1" Relationship="QuanLyBanGaRan_64131011Model.FK_Order_Voucher" FromRole="Voucher" ToRole="CustomerOrder" />
+        </EntityType>
+        <Association Name="FK__CustomerO__Accep__40F9A68C">
+          <End Type="QuanLyBanGaRan_64131011Model.AppUser" Role="AppUser" Multiplicity="0..1" />
+          <End Type="QuanLyBanGaRan_64131011Model.CustomerOrder" Role="CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="AcceptedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CustomerO__Order__40058253">
+          <End Type="QuanLyBanGaRan_64131011Model.AppUser" Role="AppUser" Multiplicity="1" />
+          <End Type="QuanLyBanGaRan_64131011Model.CustomerOrder" Role="CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="OrderedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CustomerO__Shipp__41EDCAC5">
+          <End Type="QuanLyBanGaRan_64131011Model.AppUser" Role="AppUser" Multiplicity="0..1" />
+          <End Type="QuanLyBanGaRan_64131011Model.CustomerOrder" Role="CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="ShippedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Order__44CA3770">
+          <End Type="QuanLyBanGaRan_64131011Model.CustomerOrder" Role="CustomerOrder" Multiplicity="1" />
+          <End Type="QuanLyBanGaRan_64131011Model.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerOrder">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__FoodI__45BE5BA9">
+          <End Type="QuanLyBanGaRan_64131011Model.Food" Role="Food" Multiplicity="1" />
+          <End Type="QuanLyBanGaRan_64131011Model.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodID" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="FoodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Voucher">
+          <End Type="QuanLyBanGaRan_64131011Model.Voucher" Role="Voucher" Multiplicity="0..1" />
+          <End Type="QuanLyBanGaRan_64131011Model.CustomerOrder" Role="CustomerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Voucher">
+              <PropertyRef Name="VoucherID" />
+            </Principal>
+            <Dependent Role="CustomerOrder">
+              <PropertyRef Name="VoucherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QuanLyBanGaRan_64131011ModelStoreContainer" CdmEntityContainer="QuanLyBanGaRan_64131011Entities">
+          <EntitySetMapping Name="AppRoles">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.AppRole">
+              <MappingFragment StoreEntitySet="AppRole">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppUsers">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.AppUser">
+              <MappingFragment StoreEntitySet="AppUser">
+                <ScalarProperty Name="IsActived" ColumnName="IsActived" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="CCCD" ColumnName="CCCD" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Foods">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.Food">
+              <MappingFragment StoreEntitySet="Food">
+                <ScalarProperty Name="FoodCategoryID" ColumnName="FoodCategoryID" />
+                <ScalarProperty Name="FoodImage" ColumnName="FoodImage" />
+                <ScalarProperty Name="FoodUnits" ColumnName="FoodUnits" />
+                <ScalarProperty Name="FoodPrice" ColumnName="FoodPrice" />
+                <ScalarProperty Name="FoodDetails" ColumnName="FoodDetails" />
+                <ScalarProperty Name="FoodName" ColumnName="FoodName" />
+                <ScalarProperty Name="FoodID" ColumnName="FoodID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FoodCategories">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.FoodCategory">
+              <MappingFragment StoreEntitySet="FoodCategory">
+                <ScalarProperty Name="FoodCategoryName" ColumnName="FoodCategoryName" />
+                <ScalarProperty Name="FoodCategoryID" ColumnName="FoodCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FoodPromotions">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.FoodPromotion">
+              <MappingFragment StoreEntitySet="FoodPromotion">
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="FoodID" ColumnName="FoodID" />
+                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Promotions">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.Promotion">
+              <MappingFragment StoreEntitySet="Promotion">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="PromotionDetails" ColumnName="PromotionDetails" />
+                <ScalarProperty Name="PromotionName" ColumnName="PromotionName" />
+                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerOrders">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.CustomerOrder">
+              <MappingFragment StoreEntitySet="CustomerOrder">
+                <ScalarProperty Name="VoucherID" ColumnName="VoucherID" />
+                <ScalarProperty Name="AcceptDate" ColumnName="AcceptDate" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="ShippedBy" ColumnName="ShippedBy" />
+                <ScalarProperty Name="AcceptedBy" ColumnName="AcceptedBy" />
+                <ScalarProperty Name="OrderedBy" ColumnName="OrderedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="ShipmentDate" ColumnName="ShipmentDate" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="FoodID" ColumnName="FoodID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vouchers">
+            <EntityTypeMapping TypeName="QuanLyBanGaRan_64131011Model.Voucher">
+              <MappingFragment StoreEntitySet="Voucher">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OfferDetails" ColumnName="OfferDetails" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="VoucherID" ColumnName="VoucherID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

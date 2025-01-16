@@ -1,0 +1,133 @@
+﻿@*/Admin/Promotion/OldPromotion*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.FoodPromotion>
+
+@{
+    ViewBag.Title = "Index";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
+    var id = Request.RequestContext.RouteData.Values["id"];
+}
+
+@*FILTER*@
+<div class="body-content bg-white p-4 container rounded">
+
+    @*Khu vực filter*@
+    <section class="d-flex flex-column">
+        <form class="py-3 fw-bolder d-flex flex-column w-100" method="get" action="">
+            <div class="d-flex w-100">
+                <div class="rounded-start d-flex justify-content-center align-items-center px-4 border">
+                    <i class='bx bx-filter-alt fs-3'></i>
+                </div>
+
+                <div class="d-flex flex-column flex-fill container">
+                    @*FILTER ROW 1*@
+                    <div class="row flex-column flex-lg-row">
+                        <div class="col p-0 border">
+                            @Html.DropDownList("pid", null, htmlAttributes: new { @class = "border-0 px-2 py-2 w-100" })
+                        </div>
+
+                        <div class="col p-0 border">
+                            <input id="ds" type="text" name="ds" class="px-2 py-2 w-100 border-0" placeholder="Ngày bắt đầu KM" />
+                        </div>
+
+                        <div class="col p-0 border">
+                            <input id="de" type="text" name="ds" class="px-2 py-2 w-100 border-0" placeholder="Ngày kết thúc KM" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Action BTN*@
+            <div class="d-flex mt-3 justify-content-end w-100">
+                <div class="d-flex">
+                    <a href="/Admin/OldPromotion" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-danger me-3 rounded">
+                        <i class='bx bx-reset fs-3'></i>
+                    </a>
+                    <button type="submit" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-success rounded">
+                        <i class='bx bx-check fs-3'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</div>
+
+<div class="body-content bg-white p-4 mt-4 container rounded">
+    @*Khu vực dưới header*@
+    <section class="d-flex justify-content-between py-2 mb-2">
+
+        <div class="d-flex flex-column w-100">
+
+            @*Khu vực btn để return lại trang promotion chính*@
+            <div class="d-flex justify-content-between">
+                <h4>
+                    Các CTKM từng được áp dụng
+                </h4>
+                <a href="/Admin/Promotion" class="btn btn-outline-secondary">
+                    Các CTKM đang diễn ra
+                </a>
+            </div>            
+        </div>
+
+    </section>
+
+
+    @*Khu vực của web grid *@
+    @grid.GetHtml(
+        tableStyle: "table",
+        headerStyle: "thead-dark",
+        footerStyle: "tfoot-style",
+        columns: grid.Columns(
+            grid.Column("FoodID", header: "Mã món"),
+            grid.Column("FoodName", header: "Tên món", format: @<text>@item.Food.FoodName</text>),
+grid.Column("PromotionID", header: "Mã KM"),
+grid.Column("FoodPrice", header: "Giá gốc", format: @<text>@item.Food.FoodPrice.ToString("N0") VNĐ</text>),
+grid.Column("NewFoodPrice", header: "Giá đã giảm", format: item => String.Format("{0:N0} VNĐ", item.Food.FoodPrice * (1 - item.Promotion.Discount))),
+grid.Column("DateStart", header: "Ngày BĐ", format: @<text>@item.DateStart.ToString("dd-MM-yyyy")</text>),
+grid.Column("DateEnd", header: "Ngày KT", format: @<text>@item.DateEnd.ToString("dd-MM-yyyy")</text>)
+)
+)
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("#dateS", {
+                dateFormat: "d-m-Y",  // Định dạng ngày
+                altInput: true,       // Hiển thị định dạng khác trên input
+                altFormat: "F j, Y",  // Định dạng hiển thị
+                minDate: "01012020",     // Ngày bắt đầu
+                maxDate: "today",
+                defaultDate: "@ViewBag.ds",
+            });
+            flatpickr("#dateE", {
+                dateFormat: "d-m-Y",  // Định dạng ngày
+                altInput: true,       // Hiển thị định dạng khác trên input
+                altFormat: "F j, Y",  // Định dạng hiển thị
+                minDate: "01012020",     // Ngày bắt đầu
+                maxDate: "today",
+                defaultDate: "@ViewBag.de",
+            });
+        });
+
+        $(document).ready(function () {
+            const deleteModal = $('#deleteModal')
+
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var userid = btn.getAttribute('data-bs-id')
+                var userfn = btn.getAttribute('data-bs-name')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+
+                modalContent.text(`Bạn có chắc chắn muốn xoá nhân viên ${userfn} (${userid}) không?`)
+                modalForm.attr('action', `/Admin/Customer/Delete/${userid}`)
+
+                modalTitle.text('Xoá khách hàng ' + userid)
+            })
+
+        });
+    </script>
+}

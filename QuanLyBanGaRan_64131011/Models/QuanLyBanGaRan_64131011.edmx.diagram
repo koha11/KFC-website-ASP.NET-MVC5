@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7aeeebe5da6b4f17964f7a87b4d909f3" Name="Diagram1" ZoomLevel="85">
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.AppRole" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.AppUser" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__AppUser__RoleID__7C4F7684" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.Food" Width="1.5" PointX="7.625" PointY="1" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.FoodCategory" Width="1.5" PointX="5.375" PointY="1.375" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__Food__FoodCatego__17F790F9" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.FoodPromotion" Width="1.5" PointX="9.875" PointY="1.125" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.Promotion" Width="1.5" PointX="7.625" PointY="5.375" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__FoodPromo__FoodI__30C33EC3" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__FoodPromo__Promo__2FCF1A8A" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.CustomerOrder" Width="1.5" PointX="5.625" PointY="4.125" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.OrderDetail" Width="1.5" PointX="10.25" PointY="4.375" />
+        <EntityTypeShape EntityType="QuanLyBanGaRan_64131011Model.Voucher" Width="1.5" PointX="0.75" PointY="5.75" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__CustomerO__Accep__40F9A68C" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__CustomerO__Order__40058253" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__CustomerO__Shipp__41EDCAC5" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__OrderDeta__Order__44CA3770" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK__OrderDeta__FoodI__45BE5BA9" />
+        <AssociationConnector Association="QuanLyBanGaRan_64131011Model.FK_Order_Voucher" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

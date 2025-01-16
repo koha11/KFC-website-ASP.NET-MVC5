@@ -1,0 +1,235 @@
+﻿@*/Admin/Voucher*@
+
+@model IEnumerable<QuanLyBanGaRan_64131011.Models.Voucher>
+
+@{
+    ViewBag.Title = "Index";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 10);
+    var id = Request.RequestContext.RouteData.Values["id"];
+}
+
+@*FILTER*@
+<div class="body-content bg-white p-4 container rounded">
+
+    @*Khu vực filter*@
+    <section class="d-flex flex-column">
+        <form class="py-3 fw-bolder d-flex flex-column w-100" method="get" action="">
+            <div class="d-flex w-100">
+                <div class="rounded-start d-flex justify-content-center align-items-center px-4 border">
+                    <i class='bx bx-filter-alt fs-3'></i>
+                </div>
+
+                <div class="d-flex flex-column flex-fill container">
+                    @*FILTER ROW 1*@
+                    <div class="row flex-column flex-lg-row">   
+                        <div class="col-lg-8 col p-0 row justify-content-center align-items-center px-2 py-2 m-0 border">
+                            <input type="hidden" value="@ViewBag.cs" name="cs" id="startValueInput" />
+                            <input type="hidden" value="@ViewBag.ce" name="ce" id="endValueInput" />
+                            <label class="col-2 p-0" id="startValue"></label>
+                            <div class="col-8 p-0" style="height:4px" id="slider"></div>
+                            <label class="col-2 p-0" id="endValue"></label>
+                        </div>
+
+                        <div class="col-lg-4 col p-0 border">
+                            @Html.DropDownList("ia", null, htmlAttributes: new { @class = "border-0 px-2 py-2 w-100" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Action BTN*@
+            <div class="d-flex mt-3 justify-content-end w-100">
+                <div class="d-flex">
+                    <a href="/Admin/Voucher" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-danger me-3 rounded">
+                        <i class='bx bx-reset fs-3'></i>
+                    </a>
+                    <button type="submit" class="px-3 d-flex justify-content-center align-items-center btn btn-outline-success rounded">
+                        <i class='bx bx-check fs-3'></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+</div>
+
+<div class="body-content bg-white p-4 mt-4 container rounded">
+
+    @*Khu vực dưới header*@
+    <section class="d-flex justify-content-between py-2 mb-2">
+
+        @*Thanh breadcrumb để định hướng*@
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @if (id != null)
+                {
+                    <li class="breadcrumb-item"><a href="../">@ViewBag.header</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@id</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.header</li>
+                }
+            </ol>
+        </nav>
+
+        @*Khu vực modal và btn để thêm khách hàng mới*@
+        <div class="">
+            <btn class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                Thêm Voucher mới
+            </btn>
+
+            @*Modal thêm khách hàng*@
+            <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form id="create-form" class="modal-content" method="post" action="/Admin/Voucher/Create" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">THÊM VOUCHER MỚI</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body row row-cols-2">
+
+                            <div class="d-flex flex-column details-group col">
+                                <label for="VoucherID">Mã voucher</label>
+                                <input id="VoucherID" data-vtype="Required" name="VoucherID" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="Condition">Điều kiện áp dụng</label>
+                                <input id="Condition" data-vtype="Required" name="Condition" type="number" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="Discount">Số tiền được giảm</label>
+                                <input id="Discount" data-vtype="Required" name="Discount" type="number" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;" />
+                            </div>
+                            <div class="d-flex flex-column details-group col">
+                                <label for="IsActive">Tình trạng kích hoạt</label>
+                                <select id="IsActive" name="IsActive" class="px-3 py-1 mt-2 ms-1 rounded-3" style="width: 90%; border: rgba(1, 1, 1, 0.2) 1px solid;">
+                                    <option value="true">Đang kích hoạt</option>
+                                    <option value="false">Chưa kích hoạt</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    @*Khu vực của web grid (danh sách các khách hàng)*@
+    @grid.GetHtml(
+        tableStyle: "table",
+        headerStyle: "thead-dark",
+        footerStyle: "tfoot-style",
+        columns: grid.Columns(
+            grid.Column("VoucherID", header: "Mã Voucher"),
+            grid.Column("Condition", header: "Điều kiện áp dụng", format: item =>
+            {
+                Nullable<decimal> condition = item.Condition;
+                return condition.HasValue ? condition.Value.ToString("N0") + " VNĐ" : "";
+            }),
+            grid.Column("Discount", header: "Số tiền được giảm", format: item => item.Discount.ToString("N0") + " VNĐ"),
+            grid.Column("IsActive", header: "Trạng thái", format: item => item.IsActive == true ? "Đang kích hoạt" : "Chưa kích hoạt"),
+grid.Column(header: "", format:
+        @<text>
+            @*Btn chuyển đến trang details*@
+            <a href="/Admin/Voucher/Details/@item.VoucherID" class="btn btn-outline-primary btn-sm">
+                <i class='bx bx-detail'></i>
+            </a>
+            @*Btn xoá khách hàng*@
+            <a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="@item.VoucherID">
+                <i class='bx bx-x'></i>
+            </a>
+        </text>
+)
+)
+)
+
+    @*Modal xoá khách hàng*@
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        Bạn có chắc chắn muốn xoá vocuher này không
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Slider để set khoảng thời gian
+        const slider = document.getElementById("slider");
+        const startValue = document.getElementById("startValue");
+        const endValue = document.getElementById("endValue");
+        const startValueInput = document.getElementById("startValueInput");
+        const endValueInput = document.getElementById("endValueInput");
+
+        // Khởi tạo range slider
+        noUiSlider.create(slider, {
+            start: [@ViewBag.cs, @ViewBag.ce],
+            connect: true,
+            range: {
+                min: 0,
+                max: @ViewBag.maxC,
+            },
+            step: 5000,
+        });
+
+        // Lắng nghe hành vi kéo 2 đầu slider
+        slider.noUiSlider.on("update", function (values) {
+            startValue.textContent = parseInt(values[0]).toLocaleString() + " VNĐ";
+            endValue.textContent = parseInt(values[1]).toLocaleString() + " VNĐ";
+
+            // Cập nhật input ẩn để submit form
+            startValueInput.value = values[0];
+            endValueInput.value = values[1];
+        });
+
+        $(document).ready(function () {
+            const deleteModal = $('#deleteModal')
+
+            deleteModal.on('show.bs.modal', function (e) {
+                var btn = e.relatedTarget
+                var userid = btn.getAttribute('data-bs-id')
+                var modalTitle = deleteModal.find('.modal-title')
+                var modalContent = deleteModal.find('.modal-body div')
+                var modalForm = deleteModal.find('form')
+
+                modalContent.text(`Bạn có chắc chắn muốn xoá voucher ${userid} không?`)
+                modalForm.attr('action', `/Admin/Voucher/Delete/${userid}`)
+
+                modalTitle.text('Xoá Voucher ' + userid)
+            })
+        });
+    </script>
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#create-form")
+        validate(mainForm)
+    </script>
+}
+
+@section Link {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+}
+

@@ -1,0 +1,144 @@
+﻿@*/User/OrderDetails/{id}*@
+
+@*/Menu*@
+
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = HttpContext.Current.Session["user"] as QuanLyBanGaRan_64131011.Models.AppUser;
+    var name = user != null ? user.FullName : "None";
+}
+
+<section class="py-4 container">
+    <div class="row flex-column flex-lg-row">
+        <div class="col-lg-4 rounded-5 px-5 col" style="background-color: #202124; height: fit-content" id="user-nav">
+            <div class="d-flex flex-lg-column justify-content-between align-items-center align-items-lg-baseline p-4">
+                <div>
+                    <img src="~/Images/logo1.png" class="rounded-circle" style="height: 120px; width: 120px" />
+                    <h3 class="text-white mt-2">Xin chào,<br> @name</h3>
+                    <div class="pb-2">
+                        <a class="text-white fw-bolder" href="/logout">Đăng xuất</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User/Order">Đơn hàng đã đặt</a>
+                    </div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User">Chi tiết tài khoản</a>
+                    </div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User/ChangePassword">Thay đổi mật khẩu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 px-4 col mt-4 mt-lg-0">
+            <div class="d-flex justify-content-between">
+                <h3 class="text-uppercase">Chi tiết đơn hàng @ViewBag.OrderID</h3>
+                <a href="/User/Order" class="btn btn-outline-secondary">Quay lại</a>
+            </div>
+
+            <div class="mt-2">
+                <div id="user-oder-list-container" style="min-height: 371px">
+
+                </div>
+                <div id="pagination-container"></div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const loader = $('#loading-container')
+
+            // Dữ liệu mẫu
+            let data = [];
+
+            const getData = () => {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: '/User/GetOrderDetails/@ViewBag.OrderID', // URL đến controller action
+                        type: 'GET', // Phương thức HTTP
+                        contentType: false,  // Đảm bảo không thay đổi content-type
+                        processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                        dataType: 'json',
+                        beforeSend: function () {
+                            loader.toggleClass("visually-hidden")
+                        },
+                        success: function (response) {
+                            loader.toggleClass("visually-hidden")
+                            console.log(response)
+                            resolve(response)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+            }
+
+            getData().then(res => {
+                data = res
+                const dataContainer = $('#user-oder-list-container')
+                // Khởi tạo phân trang
+                $('#pagination-container').pagination({
+                    dataSource: data,
+                    pageSize: 2, // Số mục trên mỗi trang
+                    callback: function (data, pagination) {
+                        // Hiển thị dữ liệu
+                        dataContainer.html("")
+                        let html = `<div class="row">
+                            <div class="col-3 fw-bold">
+                            </div>
+                            <div class="col-3 fw-bold">
+                                Tên món
+                            </div>
+                            <div class="col-1 fw-bold">
+                                SL
+                            </div>
+                            <div class="col-2 fw-bold">
+                                Đơn giá
+                            </div>
+                            <div class="col-3 fw-bold">
+                                Tổng đơn giá
+                            </div>
+                        </div>`;
+
+                        dataContainer.append(html)
+
+                        $.each(data, function (index, row) {
+                            html = `<div class="row">
+                                <div class="col-3">
+                                    <img src="/Images/${row.FoodImage}" class = "w-100" />
+                                </div>
+                                <div class="col-3">
+                                    ${row.FoodName}
+                                </div>
+                                <div class="col-1">
+                                    ${row.Amount}
+                                </div>
+                                <div class="col-2">
+                                    ${row.FoodPrice.toLocaleString() } VNĐ
+                                </div>
+                                <div class="col-3">
+                                    ${(row.FoodPrice * row.Amount).toLocaleString()} VNĐ
+                                </div>
+                            </div>`;
+
+                            dataContainer.append(html);
+                        });
+                    }
+                });
+            })
+
+
+        });
+    </script>
+}
+
+

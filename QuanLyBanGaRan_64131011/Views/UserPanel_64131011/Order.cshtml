@@ -1,0 +1,163 @@
+﻿@*/Menu*@
+
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = HttpContext.Current.Session["user"] as QuanLyBanGaRan_64131011.Models.AppUser;
+    var name = user != null ? user.FullName : "None";
+}
+
+<section class="py-4 container">
+    <div class="row flex-column flex-lg-row">
+        <div class="col-lg-4 rounded-5 px-5 col" style="background-color: #202124; height: fit-content" id="user-nav">
+            <div class="d-flex flex-lg-column justify-content-between align-items-center align-items-lg-baseline p-4">
+                <div>
+                    <img src="~/Images/logo1.png" class="rounded-circle" style="height: 120px; width: 120px" />
+                    <h3 class="text-white mt-2">Xin chào,<br> @name</h3>
+                    <div class="pb-2">
+                        <a class="text-white fw-bolder" href="/logout">Đăng xuất</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User/Order">Đơn hàng đã đặt</a>
+                    </div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User">Chi tiết tài khoản</a>
+                    </div>
+                    <div class="py-2">
+                        <a class="text-decoration-none text-white-50" href="/User/ChangePassword">Thay đổi mật khẩu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 px-4 col mt-4 mt-lg-0">
+            <h3 class="text-uppercase">Các đơn hàng đã đặt</h3>
+            @if (ViewBag.Empty != "")
+            {
+                <div class="w-100" style="background: url(/Images/bg.jfif)">
+                    <div>
+                        <span class="text-uppercase">Bạn chưa có <br /> đơn hàng nào</span>
+                        <a class="btn" style="background-color: var(--main-color)" href="/Menu">Bắt đầu đặt hàng</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="mt-2">
+                    <div id="user-oder-list-container" style="min-height: 371px">
+                        
+                    </div>
+                    <div id="pagination-container"></div>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const loader = $('#loading-container')
+
+            // Dữ liệu mẫu
+            let data = [];
+
+            const getData = () => {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: '/User/GetOrderList', // URL đến controller action
+                        type: 'GET', // Phương thức HTTP
+                        contentType: false,  // Đảm bảo không thay đổi content-type
+                        processData: false,  // Đảm bảo jQuery không xử lý dữ liệu FormData
+                        dataType: 'json',
+                        beforeSend: function () {
+                            loader.toggleClass("visually-hidden")
+                        },
+                        success: function (response) {
+                            loader.toggleClass("visually-hidden")
+                            resolve(response)
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Có lỗi xảy ra: ' + error)
+                        }
+                    });
+                })
+            }
+
+            getData().then(res => {
+                data = res
+                const dataContainer = $('#user-oder-list-container')
+
+                // Khởi tạo phân trang
+                $('#pagination-container').pagination({
+                    dataSource: data,
+                    pageSize: 6, // Số mục trên mỗi trang
+                    callback: function (data, pagination) {
+                        // Hiển thị dữ liệu
+                        dataContainer.html("")
+                        let html = `<div class="row">
+                            <div class="col-2 fw-bold">
+                                Mã đơn
+                            </div>
+                            <div class="col-3 fw-bold">
+                                Thời gian đặt
+                            </div>
+                            <div class="col-1 fw-bold">
+                                SL
+                            </div>
+                            <div class="col-2 fw-bold">
+                                Tổng tiền
+                            </div>
+                            <div class="col-2 fw-bold">
+                                Tình trạng
+                            </div>
+                            <div class="col-2 fw-bold">                                
+                            </div>
+                        </div>`;
+
+                        dataContainer.append(html)
+
+                        $.each(data, function (index, row) {
+                            let sttClass = "bg-warning"
+                            if (row.Status == 2)
+                                sttClass = "bg-danger"
+                            if (row.Status == 3)
+                                sttClass = "bg-success"
+
+                            html = `<div class="row">
+                                <div class="col-2">
+                                    ${row.OrderID}
+                                </div>
+                                <div class="col-3">
+                                    ${row.OrderDate}
+                                </div>
+                                <div class="col-1">
+                                    ${row.TotalFood}
+                                </div>
+                                <div class="col-2">
+                                    ${row.TotalPayment.toLocaleString()} VNĐ
+                                </div>
+                                <div class="col-2">                                    
+                                    <span class = "btn rounded-pill text-white ${sttClass}" style="font-size: 0.75rem">
+                                        ${row.Status}
+                                    </span>
+                                </div>
+                                <div class="col-2 d-flex justify-content-center align-items-center">
+                                    <a href="/User/OrderDetails/${row.OrderID}" class = "btn btn-primary detail-btn">chi tiết</a>
+                                </div>
+                            </div>`;
+
+                            dataContainer.append(html);
+                        });
+                        
+                    }
+                });
+            })         
+
+
+        });
+    </script>
+}

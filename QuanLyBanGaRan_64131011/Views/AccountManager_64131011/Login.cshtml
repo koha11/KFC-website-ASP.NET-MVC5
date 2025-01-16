@@ -1,0 +1,85 @@
+﻿@model QuanLyBanGaRan_64131011.Models.LoginViewModel_64131011
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<section class="py-4 px-lg-5 px-2 container">
+    <div class="flex-column-reverse flex-lg-row row">
+        <div class="px-2 col-lg-5 col">
+            <img src="~/Images/signin.jpg" class="w-100" />
+        </div>
+        <form action="" method="post" id="login-form" class="px-3 py-4 col-lg-7 col">
+            <h3 class="fw-bolder">ĐĂNG NHẬP</h3>
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal w-100 d-flex flex-column py-3 px-4">
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="username" class="col-lg-4 col">Tên đăng nhập</label>
+                    <input name="Username" class="col-lg-8 col" data-vtype="Required" id="username" type="text" />
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="password" class="col-lg-4 col">Mật khẩu</label>
+                    <input name="Password" class="col-lg-8 col" data-vtype="Required-MinLength_6" id="password" type="password" />
+                    <span class="input-msg position-absolute" style="bottom: -20px; left: 30%;">Mật khẩu phải có ít nhất 6 chữ số</span>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4"></div>
+                    <div class="d-flex col-lg-8" style="justify-content: flex-start">
+                        <input type="checkbox" class="" name="RememberMe" id="rememberMe" />
+                        <label for="rememberMe" class="ms-2">Nhớ mật khẩu</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4"></div>
+                    <div class="d-flex col-lg-8" style="justify-content: flex-start">
+                        <a href="#" class="" data-bs-toggle="modal" data-bs-target="#forgotPWDModal">
+                            Quên mật khẩu
+                        </a>
+                    </div>
+                </div>
+
+                <div class="py-4 d-flex justify-content-around" style="justify-content: center">
+                    <a href="/Register" class="btn btn-outline-secondary">Đăng ký</a>
+                    <input type="submit" value="Đăng nhập" class="btn btn-primary ms-4" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="forgotPWDModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" action="/RecoverPassword">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="recoverEmail">
+                        Bạn hãy nhập Email đã đăng ký tài khoản vào đây (nếu tài khoản có tồn tại thì sẽ có email gửi password mới về email của bạn)!
+                    </label>
+                    <input class="mt-4 w-100 p-2" name="Email" id="recoverEmail"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+
+
+@section Scripts {
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#login-form")
+        validate(mainForm)
+    </script>
+}

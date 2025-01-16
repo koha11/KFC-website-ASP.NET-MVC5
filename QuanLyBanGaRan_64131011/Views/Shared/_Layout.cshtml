@@ -1,0 +1,138 @@
+﻿@{ 
+    var user = HttpContext.Current.Session["user"] as QuanLyBanGaRan_64131011.Models.AppUser;
+    var name = user != null ? user.FullName : "None";
+
+    var canAcceptAdmin = user != null && user.RoleID != "CUSTOMER" ? 1 : 0;    
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    @RenderSection("Links", false)
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="position-relative">
+    @*Loader*@
+    <div id="loading-container" class="visually-hidden position-fixed top-0 start-0 d-flex justify-content-center align-items-center" style="height: 100vh; width: 100vw; background-color: rgba(1,1,1,0.3); z-index:9999; overflow:clip">
+        <i class='bx bx-loader-circle loading fs-1'></i>
+    </div>
+
+    @*Successful Popup*@
+    <div id="successful-container" class="visually-hidden position-fixed d-flex justify-content-center align-items-center rounded-5" style="height: 160px; width: 320px; background-color: rgba(1,1,1,0.9); z-index:9999; top: 50%; left: 50%; transform:translate(-50%,-50%)">
+        <div class="text-center">
+            <i class='bx bxs-check-circle text-success fs-1'></i>
+            <span class="d-block text-white">Bạn đã ABC XYZ</span>
+        </div>      
+    </div>
+
+    @*Mobile cart*@
+    <a href="/Cart" class="cart-btn rounded-circle position-fixed bg-white d-lg-none d-flex justify-content-center align-items-center nav-link shadow" style="z-index:20; right: 20px; bottom: 20px; height:60px; width:60px;">
+        <div class="fs-5 fw-bold d-flex justify-content-center align-items-center p-2 text-center" style="cursor:pointer; background: url(/Images/cart.png) no-repeat center; background-size: contain">
+            <span>@ViewBag.amount</span>
+        </div>
+    </a>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar bg-white flex-column sticky-top shadow" style="z-index:1030; height: 10vh">
+        <div class="bg-white h-100 container">
+            <a href="/" class="navbar-brand" style="background: url(/Images/logo1.png) no-repeat; background-size: contain; height:8vh; width:8vh">
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            @*Mobile navbar toggle*@
+            <div class="navbar-collapse d-sm-inline-flex justify-content-lg-around py-2 bg-white collapse">
+                <div class="d-lg-none">
+                    @if (name == "None")
+                    {
+                        <a href="/Login" class="">Đăng nhập</a>
+                    }
+                    else
+                    {
+                        <a href="/User" class="d-flex align-items-center py-2 px-4 nav-link">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center border" style="height:40px;width:40px">
+                                <i class='bx bx-user'></i>
+                            </div>
+                            <span class="ms-2 fs-4 fw-bolder" id="user-fullname">@name</span>
+                        </a>
+
+                    }
+
+                </div>
+
+                <ul class="navbar-nav flex-grow-1 fw-bold align-items-lg-center fs-5">
+                    <li><a class="nav-link py-2 px-4" href="/Menu">THỰC ĐƠN</a></li>
+                    <li class="mx-lg-3 flex-fill">
+                        <form action="#" class="d-flex justify-content-lg-center align-items-lg-center w-100 position-relative">
+                            <input class="flex-fill fs-6 px-3 py-2 rounded-5" />
+                            <button class="ms-lg-2 position-absolute border-0" style="right: 10px; background-color: unset" type="submit">
+                                <i class='bx bx-search'></i>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+
+                <div class="d-lg-flex d-none">
+                    <div class="dropdown">
+                        <a class="rounded-circle fs-3 nav-link px-lg-3 py-lg-1" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class='bx bx-user'></i>
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @if (name == "None")
+                            {
+                                <li><a class="dropdown-item" href="/Login">Đăng nhập</a></li>
+                                <li><a class="dropdown-item" href="/Register">Đăng ký</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href="/User">Tài khoản</a></li>
+                                if (canAcceptAdmin == 1)
+                                {
+                                    <li><a class="dropdown-item" href="/Admin">Quản lý</a></li>
+                                }
+                                <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <a href="/Cart" class="cart-btn fs-5 fw-bold d-flex justify-content-center align-items-center nav-link p-2 ms-2 text-center" style="cursor:pointer; background: url(/Images/cart.png) no-repeat center; background-size: contain">
+                        <span>@ViewBag.amount</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="body-content w-100" style="min-height: 100vh">
+        <div style="background-color: black; height: 20px" class="container-fluid">
+        </div>
+        @RenderBody()
+    </div>
+
+    <div class="" style="background: url(/Images/banner.jpg) no-repeat; height: 280px; background-size: cover; background-position:center">
+    </div>
+
+    <footer class="container-fluid py-lg-4" style="color: #ababab; background-color: #202124 ">
+        <div class="container">
+            <section>
+                <h5 class="text-white">Danh mục món ăn</h5>
+            </section>
+            <hr />
+            <section>
+                <h4>
+                    Đồ án kết thúc học phần môn Phát triển ứng dụng Web
+                </h4>
+            </section>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

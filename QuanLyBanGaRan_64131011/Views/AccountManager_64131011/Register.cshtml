@@ -1,0 +1,75 @@
+﻿@model QuanLyBanGaRan_64131011.Models.RegisterViewModel_64131011
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<section class="py-4 px-lg-5 px-2 container">
+    <div class="flex-column-reverse flex-lg-row row">
+        <div class="px-2 col-lg-5 col">
+            <img src="~/Images/signin.jpg" class="w-100" />
+        </div>
+        <form action="" method="post" class="px-3 py-4 col-lg-7 col" id="register-form">
+            <h3 class="fw-bolder">ĐĂNG KÝ</h3>
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal w-100 d-flex flex-column py-3 px-4">
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="FullName" class="col-lg-4 col">Họ và tên*</label>
+                    <input name="FullName" class="col-lg-8 col" id="FullName" type="text" data-vtype="Required-NotNumber" />
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="Email" class="col-lg-4 col">Email*</label>
+                    <input name="Email" class="col-lg-8 col" id="Email" type="text" data-vtype="Required-Mail" />
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="Address" class="col-lg-4 col">Địa chỉ</label>
+                    <input name="Address" class="col-lg-8 col" id="Address" type="text" />
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="Phone" class="col-lg-4 col">Số điện thoại</label>
+                    <input name="Phone" class="col-lg-8 col" id="Phone" type="text" data-vtype="Phone" />
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="username" class="col-lg-4 col" >Tên đăng nhập*</label>
+                    <input name="Username" class="col-lg-8 col" id="username" type="text" data-vtype="Required" />
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="password" class="col-lg-4 col">Mật khẩu*</label>
+                    <input name="Password" class="col-lg-8 col" id="password" type="password" data-vtype="Required-MinLength_6" />
+                    <span class="input-msg position-absolute" style="bottom: -20px; left: 30%;">Mật khẩu phải có ít nhất 6 chữ số</span>
+                </div>
+
+                <div class="row flex-lg-row flex-column align-items-baseline mb-5 position-relative">
+                    <label for="PasswordConfirm" class="col-lg-4 col">Nhập lại mật khẩu*</label>
+                    <input name="PasswordConfirm" class="col-lg-8 col" id="PasswordConfirm" type="password"  data-vtype="Required-MinLength_6-ConfirmPwd" />
+                </div>
+
+                <div class="py-4 d-flex justify-content-around" style="justify-content: center">
+                    <a href="/Login" class="btn btn-outline-secondary">Đăng nhập</a>
+                    <input type="submit" value="Đăng ký" class="btn btn-primary ms-4" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+
+
+
+@section Scripts {
+    <script type="module">
+        import validate from "/Scripts/validate.js";
+
+        const mainForm = document.querySelector("#register-form")
+
+        validate(mainForm)
+    </script>
+}
